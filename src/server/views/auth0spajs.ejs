@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .hide {
+        display: none;
+      }
+      nav {
+        margin-bottom: 2em;
+        border-width: 1px 0;
+        border-style: dotted;
+        border-color: gray;
+      }
+    </style>
+    <title>Test: SPA (auth0-spa-js)</title>
+  </head>
+  <body>
+    <h1>Test: SPA (auth0-spa-js)</h1>
+    <nav>
+      <div id="unauthorized">
+        <p><button id="loginButton">Login</button></p>
+      </div>
+      <div id="authorized" class="hide">
+        <p><button id="logoutButton">Logout</button></p>
+      </div>
+        <p><button id="testExternalAPIButton">Test External API (apiAuthTest)</button></p>
+    </nav>
+    <section>
+      <h2>Tokens</h2>
+      <dl>
+        <dt>ID Token</dt>
+        <dd id="idToken"></dd>
+        <dt>Access Token</dt>
+        <dd id="accessToken"></dd>
+        <dt>External API Response</dt>
+        <dd id="externalAPIResponse"></dd>
+      </dl>
+    </section>
+    <script src="/builds/auth0spajs.bundle.js"></script>
+  </body>
+</html>

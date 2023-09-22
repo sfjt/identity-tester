@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      dt {
+        font-weight: bold;
+      }
+      nav {
+        border-width: 1px 0;
+        border-style: dotted;
+        border-color: gray;
+      }
+    </style>
+    <title>Test: Regular Web Application</title>
+  </head>
+  <body>
+    <h1>Test: Regular Web Application</h1>
+    <nav>
+      <ul>
+        <% if(isAuthenticated) { %>
+        <li><a href="/rwa/logout">Logout</a></li>
+        <%} else { %>
+        <li><a href="/rwa/login">Login</a></li>
+        <% } %>
+      </ul>
+    </nav>
+    <% if(isAuthenticated) { %>
+    <section>
+      <h2>Tokens</h2>
+      <dl>
+        <dt>ID Token</dt>
+        <dd><%= idToken %></dd>
+        <dt>Access Token</dt>
+        <dd><%= accessToken %></dd>
+      </dl>
+    </section>
+    <% } %>
+  </body>
+</html>
