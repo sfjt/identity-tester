@@ -6474,7 +6474,7 @@
     }
     elem.textContent = data;
   }
-  async function setAPIAuthTestEvent(store) {
+  async function addAPIAuthTestEventListener(store) {
     async function test2() {
       console.log("[apiAuthTest] Requesting.");
       try {
@@ -6513,6 +6513,7 @@
       accessToken: "",
       idToken: ""
     };
+    window["__tokenStore"] = tokenStore;
     function login() {
       webAuth.authorize();
     }
@@ -6521,11 +6522,34 @@
         returnTo: window.location.href
       });
     }
+    function silentAuth() {
+      webAuth.checkSession(
+        {
+          prompt: "none",
+          responseType: "token id_token"
+        },
+        (err, authResult) => {
+          if (err) {
+            console.log("[checkSession]", err);
+            return;
+          }
+          console.log("[checkSession]", authResult);
+          toggleButtonsVisibility(true);
+          const { idToken, accessToken } = authResult;
+          tokenStore.accessToken = accessToken;
+          tokenStore.idToken = idToken;
+          show("accessToken", accessToken ? accessToken : "N/A");
+          show("idToken", idToken ? idToken : "N/A");
+        }
+      );
+    }
     const loginButton = document.getElementById("loginButton");
     loginButton?.addEventListener("click", login);
     const logoutButton = document.getElementById("logoutButton");
     logoutButton?.addEventListener("click", logout);
-    setAPIAuthTestEvent(tokenStore);
+    const testSilentAuthButton = document.getElementById("testSilentAuthButton");
+    testSilentAuthButton?.addEventListener("click", silentAuth);
+    addAPIAuthTestEventListener(tokenStore);
     webAuth.parseHash({}, (err, authResult) => {
       if (err) {
         console.log("[parseHash]", err);
@@ -6540,25 +6564,7 @@
       tokenStore.accessToken = accessToken;
       tokenStore.idToken = idToken;
     });
-    webAuth.checkSession(
-      {
-        prompt: "none",
-        responseType: "token id_token"
-      },
-      (err, authResult) => {
-        if (err) {
-          console.log("[checkSession]", err);
-          return;
-        }
-        console.log("[checkSession]", authResult);
-        toggleButtonsVisibility(true);
-        const { idToken, accessToken } = authResult;
-        tokenStore.accessToken = accessToken;
-        tokenStore.idToken = idToken;
-        show("accessToken", accessToken ? accessToken : "N/A");
-        show("idToken", idToken ? idToken : "N/A");
-      }
-    );
+    silentAuth();
   })();
 })();
 //# sourceMappingURL=auth0js.bundle.js.map

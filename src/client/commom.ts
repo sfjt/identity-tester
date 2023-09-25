@@ -32,7 +32,7 @@ type TokenStore = {
   accessToken: string
   idToken: string
 }
-export async function setAPIAuthTestEvent(store: TokenStore) {
+export async function addAPIAuthTestEventListener(store: TokenStore) {
   async function test() {
     console.log("[apiAuthTest] Requesting.")
     try {

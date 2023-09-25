@@ -2136,7 +2136,7 @@
     }
     elem.textContent = data;
   }
-  async function setAPIAuthTestEvent(store) {
+  async function addAPIAuthTestEventListener(store) {
     async function test() {
       console.log("[apiAuthTest] Requesting.");
       try {
@@ -2163,7 +2163,7 @@
     window["__getConfig"] = getConfig;
     window["__toggleButtonsVisibility"] = toggleButtonsVisibility;
     window["__show"] = show;
-    window["__setAPIAuthTestEvent"] = setAPIAuthTestEvent;
+    window["__addAPIAuthTestEventListener"] = addAPIAuthTestEventListener;
   })();
 })();
 //# sourceMappingURL=lockPrep.bundle.js.map

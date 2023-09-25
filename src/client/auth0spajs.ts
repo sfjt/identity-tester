@@ -4,7 +4,7 @@ import {
   getConfig,
   toggleButtonsVisibility,
   show,
-  setAPIAuthTestEvent,
+  addAPIAuthTestEventListener,
 } from "./commom"
 ;(async function () {
   const config = await getConfig()
@@ -25,6 +25,7 @@ import {
     accessToken: "",
     idToken: "",
   }
+  window["__tokenStore"] = tokenStore
 
   async function login() {
     await client.loginWithRedirect()
@@ -35,11 +36,40 @@ import {
     toggleButtonsVisibility(false)
   }
 
+  async function silentAuth() {
+    try {
+      console.log("[getTokenSilently] Requesting an access token.")
+      const accessToken = await client.getTokenSilently()
+      show("accessToken", accessToken ? accessToken : "N/A")
+      if (accessToken) {
+        toggleButtonsVisibility(true)
+        tokenStore.accessToken = accessToken
+      }
+    } catch (err) {
+      console.log("[getTokenSilently]", err)
+      show("accessToken", "N/A")
+    }
+  
+    try {
+      console.log("[getIdTokenClaims] Requesting an id token.")
+      const idToken = await client.getIdTokenClaims()
+      show("idToken", idToken ? idToken.__raw : "N/A")
+      if (idToken?.__raw) {
+        tokenStore.idToken = idToken.__raw
+      }
+    } catch (err) {
+      console.log("[getIdTokenClaims]", err)
+      show("idToken", "N/A")
+    }
+  }
+
   const loginButton = document.getElementById("loginButton")
   loginButton?.addEventListener("click", login)
   const logoutButton = document.getElementById("logoutButton")
   logoutButton?.addEventListener("click", logout)
-  setAPIAuthTestEvent(tokenStore)
+  const testSilentAuthButton = document.getElementById("testSilentAuthButton")
+  testSilentAuthButton?.addEventListener("click", silentAuth)
+  addAPIAuthTestEventListener(tokenStore)
 
   try {
     console.log("[handleRedirectCallback] Handling callback.")
@@ -48,28 +78,5 @@ import {
     console.log("[handleRedirectCallback]", err)
   }
 
-  try {
-    console.log("[getTokenSilently] Requesting an access token.")
-    const accessToken = await client.getTokenSilently()
-    show("accessToken", accessToken ? accessToken : "N/A")
-    if (accessToken) {
-      toggleButtonsVisibility(true)
-      tokenStore.accessToken = accessToken
-    }
-  } catch (err) {
-    console.log("[getTokenSilently]", err)
-    show("accessToken", "N/A")
-  }
-
-  try {
-    console.log("[getTokenSilently] Requesting an id token.")
-    const idToken = await client.getIdTokenClaims()
-    show("idToken", idToken ? idToken.__raw : "N/A")
-    if (idToken?.__raw) {
-      tokenStore.idToken = idToken.__raw
-    }
-  } catch (err) {
-    console.log("[getIdTokenClaims]", err)
-    show("idToken", "N/A")
-  }
+  await silentAuth()
 })()

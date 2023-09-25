@@ -2,7 +2,7 @@
   const getConfig = window.__getConfig
   const toggleButtonsVisibility = window.__toggleButtonsVisibility
   const show = window.__show
-  const setAPIAuthTestEvent = window.__setAPIAuthTestEvent
+  const addAPIAuthTestEventListener = window.__addAPIAuthTestEventListener
 
   const { AUTH0_DOMAIN, CLIENT_ID, SCOPE, API_IDENTIFIER } = await getConfig()
 
@@ -16,11 +16,33 @@
     },
     autoclose: true,
   })
-  window.__lock = lock
+  window["__lock"] = lock
 
   const tokenStore = {
     accessToken: "",
     idToken: "",
+  }
+  window["__tokenStore"] = tokenStore
+
+  function silentAuth() {
+    lock.checkSession(
+      {
+        responseType: "token id_token",
+      },
+      (err, authResult) => {
+        if (err) {
+          console.log("[checkSession]", err)
+          return
+        }
+        console.log("[checkSession]", authResult)
+        toggleButtonsVisibility(true)
+        const { accessToken, idToken } = authResult
+        tokenStore.accessToken = accessToken
+        tokenStore.idToken = idToken
+        show("accessToken", accessToken ? accessToken : "N/A")
+        show("idToken", idToken ? idToken : "N/A")
+      },
+    )
   }
 
   const loginButton = document.getElementById("loginButton")
@@ -33,7 +55,9 @@
       returnTo: window.location.href,
     })
   })
-  setAPIAuthTestEvent(tokenStore)
+  const testSilentAuthButton = document.getElementById("testSilentAuthButton")
+  testSilentAuthButton?.addEventListener("click", silentAuth)
+  addAPIAuthTestEventListener(tokenStore)
 
   lock.on("authenticated", (authResult) => {
     console.log("[on authenticated]", authResult)
@@ -43,22 +67,5 @@
     toggleButtonsVisibility(true)
   })
 
-  lock.checkSession(
-    {
-      responseType: "token id_token",
-    },
-    (err, authResult) => {
-      if (err) {
-        console.log("[checkSession]", err)
-        return
-      }
-      console.log("[checkSession]", authResult)
-      toggleButtonsVisibility(true)
-      const { accessToken, idToken } = authResult
-      tokenStore.accessToken = accessToken
-      tokenStore.idToken = idToken
-      show("accessToken", accessToken ? accessToken : "N/A")
-      show("idToken", idToken ? idToken : "N/A")
-    },
-  )
+  silentAuth()
 })()

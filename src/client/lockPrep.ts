@@ -2,7 +2,7 @@ import {
   getConfig,
   toggleButtonsVisibility,
   show,
-  setAPIAuthTestEvent,
+  addAPIAuthTestEventListener,
 } from "./commom"
 
 // auth0-lock cannot be bundled by esbuild because it uses NodeJS module (namely, "events").
@@ -11,5 +11,5 @@ import {
   window["__getConfig"] = getConfig
   window["__toggleButtonsVisibility"] = toggleButtonsVisibility
   window["__show"] = show
-  window["__setAPIAuthTestEvent"] = setAPIAuthTestEvent
+  window["__addAPIAuthTestEventListener"] = addAPIAuthTestEventListener
 })()
