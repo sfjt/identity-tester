@@ -3145,6 +3145,23 @@
     const testExternalAPIButton = document.getElementById("testExternalAPIButton");
     testExternalAPIButton?.addEventListener("click", test);
   }
+  function parseCustomParams() {
+    const customParamsTextarea = document.getElementById("customParams");
+    if (!customParamsTextarea) {
+      return;
+    }
+    const txt = customParamsTextarea.value;
+    let params = {};
+    try {
+      params = JSON.parse(txt);
+      customParamsTextarea.style.borderColor = "green";
+      return params;
+    } catch (err) {
+      console.log("[parseCustomParams]", err);
+      customParamsTextarea.style.borderColor = "red";
+      throw err;
+    }
+  }
 
   // src/client/auth0spajs.ts
   (async function() {
@@ -3167,6 +3184,17 @@
     window["__tokenStore"] = tokenStore;
     async function login() {
       await client.loginWithRedirect();
+    }
+    async function loginWithCustomParams() {
+      let params = {};
+      try {
+        params = parseCustomParams();
+      } catch (err) {
+        console.log("[loginWithCustomParams] Invalid JSON string.");
+        return;
+      }
+      console.log("[loginWithCustomParams] Logging in with custom parans.", params);
+      await client.loginWithRedirect(params);
     }
     async function logout() {
       await client.logout();
@@ -3201,6 +3229,8 @@
     loginButton?.addEventListener("click", login);
     const logoutButton = document.getElementById("logoutButton");
     logoutButton?.addEventListener("click", logout);
+    const loginWithCustomParamsButton = document.getElementById("loginWithCustomParamsButton");
+    loginWithCustomParamsButton?.addEventListener("click", loginWithCustomParams);
     const testSilentAuthButton = document.getElementById("testSilentAuthButton");
     testSilentAuthButton?.addEventListener("click", silentAuth);
     addAPIAuthTestEventListener(tokenStore);

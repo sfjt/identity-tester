@@ -5,6 +5,7 @@ import {
   toggleButtonsVisibility,
   show,
   addAPIAuthTestEventListener,
+  parseCustomParams,
 } from "./commom"
 ;(async function () {
   const config = await getConfig()
@@ -31,6 +32,21 @@ import {
     await client.loginWithRedirect()
   }
 
+  async function loginWithCustomParams() {
+    let params: any = {}
+    try {
+      params = parseCustomParams()
+    } catch (err) {
+      console.log("[loginWithCustomParams] Invalid JSON string.")
+      return
+    }
+    console.log(
+      "[loginWithCustomParams] Logging in with custom parans.",
+      params,
+    )
+    await client.loginWithRedirect(params)
+  }
+
   async function logout() {
     await client.logout()
     toggleButtonsVisibility(false)
@@ -49,7 +65,7 @@ import {
       console.log("[getTokenSilently]", err)
       show("accessToken", "N/A")
     }
-  
+
     try {
       console.log("[getIdTokenClaims] Requesting an id token.")
       const idToken = await client.getIdTokenClaims()
@@ -67,6 +83,10 @@ import {
   loginButton?.addEventListener("click", login)
   const logoutButton = document.getElementById("logoutButton")
   logoutButton?.addEventListener("click", logout)
+  const loginWithCustomParamsButton = document.getElementById(
+    "loginWithCustomParamsButton",
+  )
+  loginWithCustomParamsButton?.addEventListener("click", loginWithCustomParams)
   const testSilentAuthButton = document.getElementById("testSilentAuthButton")
   testSilentAuthButton?.addEventListener("click", silentAuth)
   addAPIAuthTestEventListener(tokenStore)

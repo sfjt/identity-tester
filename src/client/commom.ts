@@ -32,6 +32,7 @@ type TokenStore = {
   accessToken: string
   idToken: string
 }
+
 export async function addAPIAuthTestEventListener(store: TokenStore) {
   async function test() {
     console.log("[apiAuthTest] Requesting.")
@@ -52,4 +53,24 @@ export async function addAPIAuthTestEventListener(store: TokenStore) {
   }
   const testExternalAPIButton = document.getElementById("testExternalAPIButton")
   testExternalAPIButton?.addEventListener("click", test)
+}
+
+export function parseCustomParams() {
+  const customParamsTextarea = document.getElementById("customParams") as
+    | HTMLTextAreaElement
+    | undefined
+  if (!customParamsTextarea) {
+    return
+  }
+  const txt = customParamsTextarea.value
+  let params = {}
+  try {
+    params = JSON.parse(txt)
+    customParamsTextarea.style.borderColor = "green"
+    return params
+  } catch (err) {
+    console.log("[parseCustomParams]", err)
+    customParamsTextarea.style.borderColor = "red"
+    throw err
+  }
 }
