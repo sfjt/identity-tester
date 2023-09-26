@@ -6,7 +6,8 @@
     "local": "NODE_ENV=dev nodemon ./src/server/server.ts",
     "local:https": "NODE_ENV=devhttps NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" nodemon ./src/server/server.ts",
     "build": "node ./build.mjs",
-    "format": "prettier --write 'src/**/*ts' 'public/*.js' 'build.mjs'"
+    "format": "prettier --write 'src/**/*ts' 'public/*.js' 'build.mjs'",
+    "switchenv": "node ./switchenv.mjs"
   },
   "repository": "ssh://git@github.com/sfjt/identity-tester.git",
   "author": "sfjt <sho.foujita@gmail.com>",
