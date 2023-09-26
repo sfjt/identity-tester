@@ -8,6 +8,8 @@ Auth0 all in one tester.
 
 [yarn](https://yarnpkg.com/)
 
+[mkcert](https://github.com/FiloSottile/mkcert) (Only if you want to test with https locally)
+
 ## Quickstart
 
 1. Rename `env.example` to `.env` and fill required information.
@@ -25,5 +27,7 @@ If you updated one of the files in `src/client`, run `yarn build` to generate bu
 ## Switch environment variables
 
 You can save multiple environment variable files, for example, `.env.us`, `env.eu.prod`, etc., to test multiple tenants.
+
 The files with the name pattern `.env.*` except for `.env.example` will be git-ignored.
+
 Switch the set of environment variables by running `yarn run switchenv "<the env file name you want to apply>"`.
