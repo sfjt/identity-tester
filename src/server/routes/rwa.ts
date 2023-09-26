@@ -10,6 +10,9 @@ let baseURL = ""
 if (process.env.NODE_ENV === "dev") {
   baseURL = `http://${HOSTNAME}:${PORT}/rwa`
 }
+if (process.env.NODE_ENV === "devhttps") {
+  baseURL = `https://${HOSTNAME}:${PORT}/rwa`
+}
 if (process.env.NODE_ENV === "prod") {
   baseURL = `https://${HOSTNAME}/rwa`
 }
