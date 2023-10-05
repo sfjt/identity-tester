@@ -1,7 +1,6 @@
 import express from "express"
 import { expressjwt } from "express-jwt"
 import { expressJwtSecret, GetVerificationKey } from "jwks-rsa"
-import bodyParser from "body-parser"
 
 import config from "../config"
 
@@ -29,13 +28,6 @@ const checkJwt = expressjwt({
   issuer: `https://${AUTH0_DOMAIN}/`,
   algorithms: ["RS256"],
 })
-
-apiRouter.use(bodyParser.json())
-apiRouter.use(
-  bodyParser.urlencoded({
-    extended: true,
-  }),
-)
 
 apiRouter.get("/", async (req, res) => {
   res.sendStatus(200)

@@ -3,6 +3,7 @@ import https from "https"
 import path from "path"
 
 import express from "express"
+import bodyParser from "body-parser"
 
 import config from "./config"
 import rwaRouter from "./routes/rwa"
@@ -15,6 +16,12 @@ app.use("/public", express.static("public"))
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  }),
+)
 app.get("/", (req, res, next) => {
   res.render("index.ejs")
 })

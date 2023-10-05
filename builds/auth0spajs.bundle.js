@@ -3193,7 +3193,10 @@
         console.log("[loginWithCustomParams] Invalid JSON string.");
         return;
       }
-      console.log("[loginWithCustomParams] Logging in with custom parans.", params);
+      console.log(
+        "[loginWithCustomParams] Logging in with custom parans.",
+        params
+      );
       await client.loginWithRedirect(params);
     }
     async function logout() {
@@ -3229,7 +3232,9 @@
     loginButton?.addEventListener("click", login);
     const logoutButton = document.getElementById("logoutButton");
     logoutButton?.addEventListener("click", logout);
-    const loginWithCustomParamsButton = document.getElementById("loginWithCustomParamsButton");
+    const loginWithCustomParamsButton = document.getElementById(
+      "loginWithCustomParamsButton"
+    );
     loginWithCustomParamsButton?.addEventListener("click", loginWithCustomParams);
     const testSilentAuthButton = document.getElementById("testSilentAuthButton");
     testSilentAuthButton?.addEventListener("click", silentAuth);

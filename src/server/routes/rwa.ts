@@ -1,11 +1,13 @@
 import express from "express"
 import { auth } from "express-openid-connect"
+import * as jose from "jose"
 
 import config from "../config"
 
 const rwaRouter = express.Router()
+const PROFILING_CONNECTION_NAME = "profiling"
 
-const { HOSTNAME, PORT } = config.global
+const { HOSTNAME, PORT, PROFILING_SESSION_SECRET } = config.global
 let baseURL = ""
 if (process.env.NODE_ENV === "dev") {
   baseURL = `http://${HOSTNAME}:${PORT}/rwa`
@@ -42,6 +44,7 @@ rwaRouter.get("/", (req, res, next) => {
     isAuthenticated: req.oidc.isAuthenticated(),
     idToken: req.oidc.idToken,
     accessToken: req.oidc.accessToken?.access_token,
+    profilingConnectionName: PROFILING_CONNECTION_NAME,
   })
 })
 
@@ -51,6 +54,62 @@ rwaRouter.get("/login/custom", (req, res, next) => {
     authorizationParams: {
       ...req.query,
     },
+  })
+})
+
+rwaRouter.get("/login/profiling", (req, res, next) => {
+  res.oidc.login({
+    returnTo: baseURL,
+    authorizationParams: {
+      connection: PROFILING_CONNECTION_NAME,
+    },
+  })
+})
+
+rwaRouter.get("/profiling/input", async (req, res, next) => {
+  const secret = new TextEncoder().encode(PROFILING_SESSION_SECRET)
+  const jwt = req.query["session_token"] as string
+  let sub = ""
+  try{
+    const {payload, protectedHeader} = await jose.jwtVerify(jwt, secret)
+    sub = payload.sub || ""
+    console.log(payload, protectedHeader)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(400)
+    return
+  }
+  const state = req.query["state"] || ""
+  const continueURL = `${rwaConfig.issuerBaseURL}/continue?state=${state}`
+  res.render("./profiling.ejs", {
+    sessionToken: jwt,
+    state,
+    sub,
+    continueURL,
+  })
+
+  rwaRouter.post("/profiling/redirect", async (req, res, next) => {
+    const sub = req.body["sub"]
+    const state = req.body["state"]
+    const testClaimQueryParam = req.body["testClaimQueryParam"]
+    const payload = {
+      sub,
+      state,
+      testClaimQueryParam,
+    }
+    const secret = new TextEncoder().encode(PROFILING_SESSION_SECRET)
+    const  header = {
+      alg: "HS256",
+      typ: "JWT"
+    } 
+    const jwt = await new jose.SignJWT(payload)
+      .setProtectedHeader(header)
+      .setIssuedAt()
+      .setIssuer(baseURL)
+      .setExpirationTime("2h")
+      .sign(secret)
+    console.log("JWT:", jwt)
+    res.redirect(`${rwaConfig.issuerBaseURL}/continue?state=${state}&token=${jwt}`)
   })
 })
 

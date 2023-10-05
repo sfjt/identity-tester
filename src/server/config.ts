@@ -5,6 +5,10 @@ const config = {
     AUTH0_DOMAIN: getEnv("AUTH0_DOMAIN"),
     HOSTNAME: getEnv("HOSTNAME", "localhost"),
     PORT: getEnv("PORT", "3000"),
+    PROFILING_SESSION_SECRET: getEnv(
+      "PROFILING_SESSION_SECRET",
+      "defaultsecret",
+    ),
   },
   rwa: {
     CLIENT_ID: getEnv("RWA_CLIENT_ID"),
