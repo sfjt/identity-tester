@@ -9,7 +9,9 @@ const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
 const { HOSTNAME, PORT, PROFILING_SESSION_SECRET } = config.global
-const ENCODED_SESSION_SECRET = new TextEncoder().encode(PROFILING_SESSION_SECRET)
+const ENCODED_SESSION_SECRET = new TextEncoder().encode(
+  PROFILING_SESSION_SECRET,
+)
 let baseURL = ""
 if (process.env.NODE_ENV === "dev") {
   baseURL = `http://${HOSTNAME}:${PORT}/rwa`
@@ -72,7 +74,7 @@ rwaRouter.get("/profiling/input", async (req, res, next) => {
   const jwt = req.query["session_token"] as string
   const state = req.query["state"] || ""
   let sub = ""
-  try{
+  try {
     const { payload } = await jose.jwtVerify(jwt, ENCODED_SESSION_SECRET)
     sub = payload.sub || ""
   } catch (err) {
@@ -95,10 +97,10 @@ rwaRouter.get("/profiling/input", async (req, res, next) => {
       state,
       testClaim,
     }
-    const  header = {
+    const header = {
       alg: "HS256",
-      typ: "JWT"
-    } 
+      typ: "JWT",
+    }
     const token = await new jose.SignJWT(payload)
       .setProtectedHeader(header)
       .setIssuedAt()
