@@ -75,7 +75,10 @@ rwaRouter.get("/profiling/input", async (req, res, next) => {
   const state = req.query["state"] || ""
   let sub = ""
   try {
-    const { payload } = await jose.jwtVerify(session_token, ENCODED_SESSION_SECRET)
+    const { payload } = await jose.jwtVerify(
+      session_token,
+      ENCODED_SESSION_SECRET,
+    )
     sub = payload.sub || ""
   } catch (err) {
     console.error(err)
