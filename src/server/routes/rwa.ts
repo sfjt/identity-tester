@@ -71,11 +71,11 @@ rwaRouter.get("/login/profiling", (req, res, next) => {
 })
 
 rwaRouter.get("/profiling/input", async (req, res, next) => {
-  const jwt = req.query["session_token"] as string
+  const session_token = req.query["session_token"] as string
   const state = req.query["state"] || ""
   let sub = ""
   try {
-    const { payload } = await jose.jwtVerify(jwt, ENCODED_SESSION_SECRET)
+    const { payload } = await jose.jwtVerify(session_token, ENCODED_SESSION_SECRET)
     sub = payload.sub || ""
   } catch (err) {
     console.error(err)
@@ -83,7 +83,7 @@ rwaRouter.get("/profiling/input", async (req, res, next) => {
     return
   }
   res.render("./profiling.ejs", {
-    sessionToken: jwt,
+    sessionToken: session_token, // Just to inspect session_token. It's not required.
     state,
     sub,
   })
