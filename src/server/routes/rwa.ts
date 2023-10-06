@@ -1,6 +1,7 @@
 import express from "express"
 import { auth } from "express-openid-connect"
 import * as jose from "jose"
+import axios from "axios"
 
 import config from "../config"
 
@@ -8,6 +9,7 @@ const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
 const { HOSTNAME, PORT, PROFILING_SESSION_SECRET } = config.global
+const ENCODED_SESSION_SECRET = new TextEncoder().encode(PROFILING_SESSION_SECRET)
 let baseURL = ""
 if (process.env.NODE_ENV === "dev") {
   baseURL = `http://${HOSTNAME}:${PORT}/rwa`
@@ -67,49 +69,48 @@ rwaRouter.get("/login/profiling", (req, res, next) => {
 })
 
 rwaRouter.get("/profiling/input", async (req, res, next) => {
-  const secret = new TextEncoder().encode(PROFILING_SESSION_SECRET)
   const jwt = req.query["session_token"] as string
+  const state = req.query["state"] || ""
   let sub = ""
   try{
-    const {payload, protectedHeader} = await jose.jwtVerify(jwt, secret)
+    const { payload } = await jose.jwtVerify(jwt, ENCODED_SESSION_SECRET)
     sub = payload.sub || ""
-    console.log(payload, protectedHeader)
   } catch (err) {
     console.error(err)
     res.sendStatus(400)
     return
   }
-  const state = req.query["state"] || ""
-  const continueURL = `${rwaConfig.issuerBaseURL}/continue?state=${state}`
   res.render("./profiling.ejs", {
     sessionToken: jwt,
     state,
     sub,
-    continueURL,
   })
 
   rwaRouter.post("/profiling/redirect", async (req, res, next) => {
     const sub = req.body["sub"]
     const state = req.body["state"]
-    const testClaimQueryParam = req.body["testClaimQueryParam"]
+    const testClaim = req.body["testClaim"]
     const payload = {
       sub,
       state,
-      testClaimQueryParam,
+      testClaim,
     }
-    const secret = new TextEncoder().encode(PROFILING_SESSION_SECRET)
     const  header = {
       alg: "HS256",
       typ: "JWT"
     } 
-    const jwt = await new jose.SignJWT(payload)
+    const token = await new jose.SignJWT(payload)
       .setProtectedHeader(header)
       .setIssuedAt()
       .setIssuer(baseURL)
       .setExpirationTime("2h")
-      .sign(secret)
-    console.log("JWT:", jwt)
-    res.redirect(`${rwaConfig.issuerBaseURL}/continue?state=${state}&token=${jwt}`)
+      .sign(ENCODED_SESSION_SECRET)
+    console.log("JWT:", token)
+    const continueURL = `${rwaConfig.issuerBaseURL}/continue?state=${state}`
+    res.render("./profilingRedirect.ejs", {
+      continueURL,
+      token,
+    })
   })
 })
 

@@ -1,37 +1,23 @@
-
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <style>
-      dt {
-        font-weight: bold;
-      }
-    </style>
-    <title>Test: Progressive Profiling</title>
+    <title>Progressive Profiling</title>
   </head>
   <body>
-    <h1>Test: Progressive Profiling</h1>
+    <h1>Progressive Profiling</h1>
+    <h2>Session Token</h2>
+    <p><%= sessionToken %></p>
+    <h2>Test front-channel data transaction</h2>
     <section>
-      <h2>Test GET</h2>
-      <p>The form will post data to the backend of this app.</p>
-      <p>Then the backend code redirects you to the "/continue" endpoint, putting a signed token in query parameters.</p>
+      <p>The form posts data to the backend of this app, /rwa/profiling/redirect.</p>
+      <p>Then the backend code signs the JWT.</p>
       <form action="/rwa/profiling/redirect" method="POST">
         <p>sub: <input value="<%= sub %>" name="sub"></p>
-        <p>testClaimGet: <input value="TEST QUERY PARAM" type="text" name="testClaimQueryParam"></p>
+        <p>testClaim: <input value="TEST CLAIM" type="text" name="testClaim"></p>
         <p>state: <input value="<%= state %>" name="state"></p>
         <p><button>Continue with query params</button></p>
       </form>
-    </section>
-    <section>
-      <h2>Test POST</h2>
-      <p>The action will handle the payload in event.request.body.</p>
-      <form action="<%= continueURL %>" method="POST" id="postJWTForm">
-        <p>testClaimFormPost: <input  value="TEST FORM POST" name="testClaimFormPost"></p>
-        <p><button>Continue with Form POST data</button></p>
-      </form>
-    </section>
-
     </section>
   </body>
 </html>

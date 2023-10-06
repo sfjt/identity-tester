@@ -8,15 +8,15 @@ exports.onExecutePostLogin = async (event, api) => {
   const REDIRECT_TO = "http://localhost:3000/rwa/profiling/input"
   const AUTH0_DOMAIN = event.secrets.AUTH0_DOMAIN
 
-  console.log("=====ProgressiveProfiling STARTED=====")
+  console.log("===== ProgressiveProfiling STARTED =====")
 
   const connName = event.connection.name
-  console.log("connName", connName)
+  console.log("connName:", connName)
   if(connName !== "profiling") {
     console.log("Skip profiling.")
     return
   }
-
+  console.log("Redirecting the user to:", REDIRECT_TO)
   const token = api.redirect.encodeToken({
     secret: event.secrets.REDIRECT_SECRET,
     expiresInSeconds: 60, 
@@ -43,21 +43,14 @@ exports.onContinuePostLogin = async (event, api) => {
   const AUTH0_DOMAIN = event.secrets.AUTH0_DOMAIN
   const prefix = `https://${AUTH0_DOMAIN}`
 
-  console.log("=====ProgressiveProfiling RESUMED=====")
+  console.log("===== ProgressiveProfiling RESUMED =====")
   
-  api.user.setAppMetadata("profilingDone", true)
-  
-  const { testClaimFormPost } = event.request.body
-  console.log("testClaimFormPost", testClaimFormPost)
-  if(testClaimFormPost) {
-    api.idToken.setCustomClaim(`${prefix}/testClaimFormPost`, testClaimFormPost)
-    return
-  }
+  api.user.setAppMetadata("profilingDone:", true)
 
   const payload = api.redirect.validateToken({
     secret: event.secrets.REDIRECT_SECRET,
     tokenParameterName: "token",
   })
-  console.log("payload", payload)
-  api.idToken.setCustomClaim(`${prefix}/testClaimQueryParam`, payload.testClaimQueryParam)
+  console.log("payload:", payload)
+  api.idToken.setCustomClaim(`${prefix}/testClaim`, payload.testClaim)
 };

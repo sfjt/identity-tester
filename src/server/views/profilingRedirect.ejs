@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      form.hiddenForm {
+        visibility: hidden;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <title>Progressive Profiling Redirect</title>
+  </head>
+  <body>
+    <form id="hiddenForm" action="<%= continueURL %>" method="post">
+      <input type="hidden" value="<%= token %>" name="token">
+    </form>
+    <script src="/public/submitForm.js"></script>
+  </body>
+</html>
