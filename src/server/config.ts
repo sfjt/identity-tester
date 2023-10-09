@@ -7,12 +7,15 @@ const config = {
     PORT: getEnv("PORT", "3000"),
     PROFILING_SESSION_SECRET: getEnv(
       "PROFILING_SESSION_SECRET",
-      "defaultsecret",
+      "Thequickbrownfoxjumpsoverthelazydog",
     ),
   },
   rwa: {
     CLIENT_ID: getEnv("RWA_CLIENT_ID"),
-    CLIENT_SECRET: getEnv("RWA_CLIENT_SECRET"),
+    CLIENT_SECRET: getEnv(
+      "RWA_CLIENT_SECRET",
+      "Thequickbrownfoxjumpsoverthelazydog",
+    ),
     SECRET: getEnv("RWA_SECRET"),
     SCOPE: getEnv("RWA_SCOPE", "openid profile email"),
   },

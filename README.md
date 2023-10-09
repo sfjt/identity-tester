@@ -6,15 +6,20 @@ Auth0 all in one tester.
 
 ## Prerequisites
 
-[yarn](https://yarnpkg.com/)
-
-[mkcert](https://github.com/FiloSottile/mkcert) (Only if you want to test with https locally)
+- An [Auth0](https://auth0.com/) tenant.
+- [yarn](https://yarnpkg.com/)
+- [mkcert](https://github.com/FiloSottile/mkcert) (Only if you want to test with https locally)
 
 ## Quickstart
 
-1. Rename `env.example` to `.env` and fill required information.
-2. `yarn install`
-3. `yarn run local`
+1. Configure your Auth0 tenant. 
+    - Create a [Regular Web Application](https://auth0.com/docs/get-started/auth0-overview/create-applications/regular-web-apps) and a [SPA](https://auth0.com/docs/get-started/auth0-overview/create-applications/single-page-web-apps). Register an [external API](https://auth0.com/docs/get-started/auth0-overview/set-up-apis).
+    - Set Callback URLs.
+      - Regular Web Application: `http://localhost/3000/rwa/callback, https://localhost/3000/rwa/callback`
+      - SPA: `http://localhost/3000/auth0spajs, http://localhost/3000/auth0js, http://localhost/3000/lock, https://localhost/3000/auth0spajs, https://localhost/3000/auth0js, https://localhost/3000/lock`
+2. Rename `env.example` to `.env` and fill required information.
+3. `yarn install`
+4. `yarn run local`
 
 If you updated one of the files in `src/client`, run `yarn build` to generate bundle JavaScript files.
 
