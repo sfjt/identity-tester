@@ -15,13 +15,18 @@ Auth0 all in one tester.
 1. Configure your Auth0 tenant. 
     - Create a [Regular Web Application](https://auth0.com/docs/get-started/auth0-overview/create-applications/regular-web-apps) and a [SPA](https://auth0.com/docs/get-started/auth0-overview/create-applications/single-page-web-apps). Register an [external API](https://auth0.com/docs/get-started/auth0-overview/set-up-apis).
     - Set Callback URLs.
-      - Regular Web Application: `http://localhost/3000/rwa/callback, https://localhost/3000/rwa/callback`
-      - SPA: `http://localhost/3000/auth0spajs, http://localhost/3000/auth0js, http://localhost/3000/lock, https://localhost/3000/auth0spajs, https://localhost/3000/auth0js, https://localhost/3000/lock`
+      - Regular Web Application:
+        ```
+        http://localhost/3000/rwa/callback, https://localhost/3000/rwa/callback
+        ```
+      - SPA: 
+        ```
+        http://localhost/3000/auth0spajs, http://localhost/3000/auth0js, http://localhost/3000/lock, https://localhost/3000/auth0spajs, https://localhost/3000/auth0js, https://localhost/3000/lock
+        ```
 2. Rename `env.example` to `.env` and fill required information.
 3. `yarn install`
-4. `yarn run local`
-
-If you updated one of the files in `src/client`, run `yarn build` to generate bundle JavaScript files.
+4. If you updated one of the files in `src/client`, run `yarn build` to generate bundle JavaScript files.
+5. `yarn run local`
 
 ## Test https on your local machine
 
@@ -35,4 +40,4 @@ You can save multiple environment variable files, for example, `.env.us`, `env.e
 
 The files with the name pattern `.env.*` except for `.env.example` will be git-ignored.
 
-Switch the set of environment variables by running `yarn run switchenv "<the env file name you want to apply>"`.
+Switch the set of environment variables by running `yarn run switchenv ".env.us"`. (It will overwrite .env file.)
