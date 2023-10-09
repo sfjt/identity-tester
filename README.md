@@ -2,7 +2,9 @@
 
 Auth0 all in one tester.
 
-**Not for production use. Low security.**
+**It is NOT an Okta official repository.**
+
+**For testing and learning purposes only. Do not use (copy and paste) the example codes in production. There is no guarantee its quality and/or security level meet your business requirements.**
 
 ## Prerequisites
 
