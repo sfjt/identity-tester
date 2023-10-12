@@ -8,6 +8,8 @@ Auth0 all in one tester.
 
 ## Prerequisites
 
+See the `.nvmrc` file for the [Node](https://nodejs.org/en) version.
+
 - An [Auth0](https://auth0.com/) tenant.
 - [yarn](https://yarnpkg.com/)
 - [mkcert](https://github.com/FiloSottile/mkcert) (Only if you want to test with https locally)
