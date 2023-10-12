@@ -21,7 +21,7 @@ const config = {
   },
   spa: {
     CLIENT_ID: getEnv("SPA_CLIENT_ID"),
-    SCOPE: getEnv("RWA_SCOPE", "openid profile email"),
+    SCOPE: getEnv("SPA_SCOPE", "openid profile email"),
   },
   api: {
     API_IDENTIFIER: getEnv("API_IDENTIFIER"),
