@@ -55,6 +55,7 @@ rwaRouter.get("/", (req, res, next) => {
 rwaRouter.get("/login/custom", (req, res, next) => {
   console.log("logging in with custom params", req.query)
   res.oidc.login({
+    returnTo: baseURL,
     authorizationParams: {
       ...req.query,
     },
