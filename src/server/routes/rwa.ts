@@ -4,6 +4,7 @@ import * as jose from "jose"
 import axios from "axios"
 
 import config from "../config"
+import errorHandler from "../middlewares/errorHandler"
 
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
@@ -72,8 +73,8 @@ rwaRouter.get("/login/profiling", (req, res, next) => {
 })
 
 rwaRouter.get("/profiling/input", async (req, res, next) => {
-  const session_token = req.query["session_token"] as string
-  const state = req.query["state"] || ""
+  const session_token = req.query["session_token"]?.toString() || ""
+  const state = req.query["state"]?.toString() || ""
   let sub = ""
   try {
     const { payload } = await jose.jwtVerify(
@@ -119,5 +120,7 @@ rwaRouter.get("/profiling/input", async (req, res, next) => {
     })
   })
 })
+
+rwaRouter.use(errorHandler)
 
 export default rwaRouter
