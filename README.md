@@ -2,13 +2,13 @@
 
 Auth0 all in one tester.
 
-**It is NOT an Okta official repository.**
+**For testing and learning purposes only. This is NOT an Okta official repository.**
 
-**For testing and learning purposes only. Do not use (copy and paste) the example codes in production. There is no guarantee its quality and/or security level meet your business requirements.**
+Do not copy and paste the code in production without thorough reviewing and testing. There is no guarantee that the quality and security level of the code meet your business requirements.
 
 ## Prerequisites
 
-See the `.nvmrc` file for the [Node](https://nodejs.org/en) version.
+See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version.
 
 - An [Auth0](https://auth0.com/) tenant.
 - [yarn](https://yarnpkg.com/)
