@@ -11,10 +11,10 @@ import spaRouter from "./routes/spa"
 import apiRouter from "./routes/api"
 
 const app = express()
-app.use("/builds", express.static("builds"))
+app.use("/builds", express.static("builds/client"))
 app.use("/public", express.static("public"))
 app.set("view engine", "ejs")
-app.set("views", path.join(__dirname, "views"))
+app.set("views", path.join(process.cwd(), "views"))
 
 app.use(bodyParser.json())
 app.use(
@@ -45,5 +45,10 @@ if (NODE_ENV === "devhttps") {
   const cert = fs.readFileSync(certPath, "utf-8")
   https.createServer({ key, cert }, app).listen(PORT, () => {
     console.log(`Running on local: https://${HOSTNAME}:${PORT}`)
+  })
+}
+if (NODE_ENV === "prod") {
+  app.listen(PORT, () => {
+    console.log(`Running on local machine: https://${HOSTNAME}`)
   })
 }

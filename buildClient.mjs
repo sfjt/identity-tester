@@ -6,16 +6,12 @@ const buildTasks = filenames.map((name) => {
   return esbuild.build({
     entryPoints: [`./src/client/${name}.ts`],
     bundle: true,
-    outfile: `./builds/${name}.bundle.js`,
+    outfile: `./builds/client/${name}.bundle.js`,
     sourcemap: "linked",
     logLevel: "info",
   })
 })
 
-Promise.all(buildTasks)
-  .then((_) => {
-    console.log("[esbuild] COMPLETE")
-  })
-  .catch((reason) => {
-    console.error("[esbuild] ERROR", reason)
-  })
+Promise.all(buildTasks).catch((reason) => {
+  console.error("[esbuild] ERROR", reason)
+})
