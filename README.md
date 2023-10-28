@@ -35,7 +35,7 @@ See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version.
 ## Test https on your local machine
 
 1. Install [mkcert](https://github.com/FiloSottile/mkcert). And trust the mkcert Root CA.
-2. Create a certificate and a key for localhost (localhost.pem and localhost-key.pem,) place them under `./key` directory.
+2. Create a certificate and a key for localhost (localhost.pem and localhost-key.pem,) place them under `./keys` directory.
 3. Run `yarn run local:https`
 
 ## Switch environment variables
