@@ -10,7 +10,7 @@ Do not copy and paste the code in production without thorough reviewing and test
 
 See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version.
 
-- An [Auth0](https://auth0.com/) tenant.
+- An [Auth0](https://auth0.com/) tenant
 - [yarn](https://yarnpkg.com/)
 - [mkcert](https://github.com/FiloSottile/mkcert) (Only if you want to test with https locally)
 
