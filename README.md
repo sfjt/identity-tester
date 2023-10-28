@@ -28,9 +28,7 @@ See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version.
         http://localhost/3000/auth0spajs, http://localhost/3000/auth0js, http://localhost/3000/lock, https://localhost/3000/auth0spajs, https://localhost/3000/auth0js, https://localhost/3000/lock
         ```
 2. Rename `env.example` to `.env` and fill required information.
-3. `yarn install`
-4. If you updated one of the files in `src/client`, run `yarn build` to generate bundle JavaScript files.
-5. `yarn run local`
+3. Run `yarn install` then `yarn run local`
 
 ## Test https on your local machine
 
