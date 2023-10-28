@@ -50,6 +50,7 @@ rwaRouter.get("/", (req, res, next) => {
     idToken: req.oidc.idToken,
     accessToken: req.oidc.accessToken?.access_token,
     profilingConnectionName: PROFILING_CONNECTION_NAME,
+    auth0Domain: AUTH0_DOMAIN,
   })
 })
 
