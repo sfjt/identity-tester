@@ -16,7 +16,7 @@ const config = {
       "RWA_CLIENT_SECRET",
       "Thequickbrownfoxjumpsoverthelazydog",
     ),
-    SECRET: getEnv("RWA_SECRET"),
+    SECRET: getEnv("RWA_SESSION_SECRET"),
     SCOPE: getEnv("RWA_SCOPE", "openid profile email"),
   },
   spa: {
