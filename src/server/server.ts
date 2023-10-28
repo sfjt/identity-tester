@@ -35,7 +35,7 @@ const { HOSTNAME, PORT } = config.global
 
 if (NODE_ENV === "dev") {
   app.listen(PORT, () => {
-    console.log(`Running on local machine: http://${HOSTNAME}:${PORT}`)
+    console.log(`Listening - local machine: http://${HOSTNAME}:${PORT}`)
   })
 }
 if (NODE_ENV === "devhttps") {
@@ -44,11 +44,11 @@ if (NODE_ENV === "devhttps") {
   const key = fs.readFileSync(keyPath, "utf-8")
   const cert = fs.readFileSync(certPath, "utf-8")
   https.createServer({ key, cert }, app).listen(PORT, () => {
-    console.log(`Running on local: https://${HOSTNAME}:${PORT}`)
+    console.log(`Listening - local machine: https://${HOSTNAME}:${PORT}`)
   })
 }
 if (NODE_ENV === "prod") {
   app.listen(PORT, () => {
-    console.log(`Running on local machine: https://${HOSTNAME}`)
+    console.log(`Listening - production environment: https://${HOSTNAME}`)
   })
 }
