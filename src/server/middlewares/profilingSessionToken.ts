@@ -9,7 +9,7 @@ const ENCODED_SESSION_SECRET = new TextEncoder().encode(
 )
 
 export function verifyProfilingSessionToken(): RequestHandler {
-  return async (req: Request, res:Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const session_token = req.query["session_token"]?.toString() || ""
     let sub = ""
     try {
@@ -29,7 +29,7 @@ export function verifyProfilingSessionToken(): RequestHandler {
 }
 
 export function signProfilingSessionToken(baseURL: string): RequestHandler {
-  return async (req: Request, res:Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const sub = req.body["sub"]?.toString() || ""
     const state = req.body["state"]?.toString() || ""
     const testClaim = req.body["testClaim"]?.toString() || ""
@@ -50,7 +50,7 @@ export function signProfilingSessionToken(baseURL: string): RequestHandler {
         .setIssuer(baseURL)
         .setExpirationTime("10m")
         .sign(ENCODED_SESSION_SECRET)
-    } catch(err) {
+    } catch (err) {
       next(err)
     }
     res.locals["new_session_token"] = token

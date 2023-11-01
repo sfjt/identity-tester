@@ -2,7 +2,10 @@ import express from "express"
 import { auth } from "express-openid-connect"
 
 import config from "../config"
-import { verifyProfilingSessionToken, signProfilingSessionToken } from "../middlewares/profilingSessionToken"
+import {
+  verifyProfilingSessionToken,
+  signProfilingSessionToken,
+} from "../middlewares/profilingSessionToken"
 import errorHandler from "../middlewares/errorHandler"
 
 const rwaRouter = express.Router()
@@ -69,24 +72,32 @@ rwaRouter.get("/login/profiling", (req, res, next) => {
   })
 })
 
-rwaRouter.get("/profiling/input", verifyProfilingSessionToken(), async (req, res, next) => {
-  res.render("./profiling.ejs", {
-    sessionToken: res.locals["session_token"], // Just to inspect session_token. It's not required.
-    state: res.locals["state"],
-    sub: res.locals["sub"],
-  })
-})
+rwaRouter.get(
+  "/profiling/input",
+  verifyProfilingSessionToken(),
+  async (req, res, next) => {
+    res.render("./profiling.ejs", {
+      sessionToken: res.locals["session_token"], // Just to inspect session_token. It's not required.
+      state: res.locals["state"],
+      sub: res.locals["sub"],
+    })
+  },
+)
 
-rwaRouter.post("/profiling/redirect", signProfilingSessionToken(baseURL), async (req, res, next) => {
-  const token = res.locals["new_session_token"]
-  const state = res.locals["state"]
-  console.log("New Session Token:", token)
-  const continueURL = `${rwaConfig.issuerBaseURL}/continue?state=${state}`
-  res.render("./profilingRedirect.ejs", {
-    continueURL,
-    token,
-  })
-})
+rwaRouter.post(
+  "/profiling/redirect",
+  signProfilingSessionToken(baseURL),
+  async (req, res, next) => {
+    const token = res.locals["new_session_token"]
+    const state = res.locals["state"]
+    console.log("New Session Token:", token)
+    const continueURL = `${rwaConfig.issuerBaseURL}/continue?state=${state}`
+    res.render("./profilingRedirect.ejs", {
+      continueURL,
+      token,
+    })
+  },
+)
 
 rwaRouter.use(errorHandler)
 

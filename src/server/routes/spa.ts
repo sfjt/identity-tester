@@ -9,19 +9,27 @@ const { API_IDENTIFIER } = config.api
 const spaRouter = express.Router()
 
 spaRouter.get("/", (req, res, next) => {
-  res.render("./spaindex.ejs")
+  res.render("./spaindex.ejs", {
+    auth0Domain: AUTH0_DOMAIN,
+  })
 })
 
 spaRouter.get("/auth0spajs", (req, res, next) => {
-  res.render("./auth0spajs.ejs")
+  res.render("./auth0spajs.ejs", {
+    auth0Domain: AUTH0_DOMAIN,
+  })
 })
 
 spaRouter.get("/auth0js", (req, res, next) => {
-  res.render("./auth0js.ejs")
+  res.render("./auth0js.ejs", {
+    auth0Domain: AUTH0_DOMAIN,
+  })
 })
 
 spaRouter.get("/lock", (req, res, next) => {
-  res.render("./lock.ejs")
+  res.render("./lock.ejs", {
+    auth0Domain: AUTH0_DOMAIN,
+  })
 })
 
 spaRouter.get("/config", (req, res, next) => {

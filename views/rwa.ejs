@@ -30,10 +30,7 @@
         <li><a href="/rwa/login">Login</a></li>
         <% } %>
       </ul>
-      <ul>
-        <li><a href="https://<%= auth0Domain %>/v2/logout">Logout from the tenant (legacy)</a></li>
-        <li><a href="https://<%= auth0Domain %>/oidc/logout">Logout from the tenant (OIDC)</a></li>
-      </ul>
+      <%- include("./commonLinks.ejs", auth0Domain)%>
     </nav>
     <% if(isAuthenticated) { %>
     <section>
