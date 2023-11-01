@@ -46,7 +46,6 @@ mfaSettingsRouter.get("/", requiresAuth(), async (req, res, next) => {
       },
     })
     authenticators = resp.data
-    console.log(authenticators)
   } catch (err) {
     next(err)
   }
