@@ -30,7 +30,7 @@
         <li><a href="/rwa/login">Login</a></li>
         <% } %>
       </ul>
-      <%- include("./commonLinks.ejs", auth0Domain)%>
+      <%- include("./commonLinks.ejs", issuerBaseURL)%>
     </nav>
     <% if(isAuthenticated) { %>
     <section>

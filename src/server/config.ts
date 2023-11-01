@@ -1,10 +1,16 @@
 import "dotenv/config"
 
+const AUTH0_DOMAIN = getEnv("AUTH0_DOMAIN")
+const HOSTNAME = getEnv("HOSTNAME", "localhost")
+const PORT = getEnv("PORT", "3000")
+const CANONICAL_DOMAIN = getEnv("CANONICAL_DOMAIN")
+
 const config = {
   global: {
-    AUTH0_DOMAIN: getEnv("AUTH0_DOMAIN"),
-    HOSTNAME: getEnv("HOSTNAME", "localhost"),
-    PORT: getEnv("PORT", "3000"),
+    AUTH0_DOMAIN,
+    HOSTNAME,
+    PORT,
+    ISSUER_BASE_URL: `https://${AUTH0_DOMAIN}`,
     PROFILING_SESSION_SECRET: getEnv(
       "PROFILING_SESSION_SECRET",
       "Thequickbrownfoxjumpsoverthelazydog",
@@ -18,6 +24,21 @@ const config = {
     ),
     SECRET: getEnv("RWA_SESSION_SECRET"),
     SCOPE: getEnv("RWA_SCOPE", "openid profile email"),
+    BASE_URL: baseURL("rwa"),
+  },
+  mfaSettings: {
+    CLIENT_ID: getEnv("MFA_SETTINGS_CLIENT_ID"),
+    CLIENT_SECRET: getEnv(
+      "MFA_SETTINGS_CLIENT_SECRET",
+      "Thequickbrownfoxjumpsoverthelazydog",
+    ),
+    SECRET: getEnv("MFA_SETTINGS_SESSION_SECRET"),
+    SCOPE: getEnv(
+      "MFA_SETTINGS_SCOPE",
+      "openid profile email enroll read:authenticators remove:authenticators",
+    ),
+    BASE_URL: baseURL("mfa"),
+    AUDIENCE: `https://${CANONICAL_DOMAIN}/mfa/`,
   },
   spa: {
     CLIENT_ID: getEnv("SPA_CLIENT_ID"),
@@ -34,6 +55,20 @@ function getEnv(name: string, defaultValue = ""): string {
     return v
   }
   return defaultValue
+}
+
+function baseURL(baseRoute: string) {
+  const { NODE_ENV } = process.env
+  if (NODE_ENV === "dev") {
+    return `http://${HOSTNAME}:${PORT}/${baseRoute}`
+  }
+  if (NODE_ENV === "devhttps") {
+    return `https://${HOSTNAME}:${PORT}/${baseRoute}`
+  }
+  if (NODE_ENV === "prod") {
+    return `https://${HOSTNAME}/${baseRoute}`
+  }
+  throw new Error(`Unexpected NODE_ENV value: ${NODE_ENV}`)
 }
 
 export default config

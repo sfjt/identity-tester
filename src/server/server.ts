@@ -9,6 +9,7 @@ import config from "./config"
 import rwaRouter from "./routes/rwa"
 import spaRouter from "./routes/spa"
 import apiRouter from "./routes/api"
+import mfaSettingsRouter from "./routes/mfa"
 
 const app = express()
 app.use("/builds", express.static("builds/client"))
@@ -29,6 +30,7 @@ app.get("/", (req, res, next) => {
 app.use("/rwa", rwaRouter)
 app.use("/spa", spaRouter)
 app.use("/api", apiRouter)
+app.use("/mfa", mfaSettingsRouter)
 
 const { NODE_ENV } = process.env
 const { HOSTNAME, PORT } = config.global

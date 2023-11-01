@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      dt {
+        font-weight: bold;
+      }
+      nav {
+        margin-bottom: 2em;
+        border-width: 1px 0;
+        border-style: dotted;
+        border-color: gray;
+      }
+    </style>
+    <title>MFA Settings</title>
+  </head>
+  <body>
+    <h1>MFA Settings</h1>
+    <nav>
+      <ul>
+        <li><a href="/mfa/logout?returnTo=">Logout</a></li>
+      </ul>
+      <%- include("./commonLinks.ejs", issuerBaseURL)%>
+    </nav>
+    <section>
+      <dl>
+        <% authenticators.forEach(function (v, _) { %>
+          <dt><%= v.id %></dt>
+          <dd>Type: <%= v.authenticator_type %></dd>
+          <dd>OOB Channel: <%= v.oob_channel %></dd>
+          <dd>Active: <%= v.active %></dd>
+        <% }); %>
+      </dl>
+    </section>
+  </body>
+</html>

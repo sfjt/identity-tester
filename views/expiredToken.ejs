@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <style>
+      dt {
+        font-weight: bold;
+      }
       nav {
         margin-bottom: 2em;
         border-width: 1px 0;
@@ -10,12 +13,12 @@
         border-color: gray;
       }
     </style>
-    <title>MFA Settings</title>
+    <title>Expired Token</title>
   </head>
   <body>
-    <h1>MFA Settings</h1>
-    <nav>
-      <%- include("./commonLinks.ejs", auth0Domain)%>
-    </nav>
+    <h1>Expired Token</h1>
+    <p>Your token is expired. Please login again.</p>
+    <p><a href="<%= loginURL %>"><%= loginURL %></a></p>
+    <p><%= accessToken %></p>
   </body>
 </html>
