@@ -60,7 +60,13 @@
       <h2>Test progressive profiling</h2>
       <ul>
         <li>Have a username+password connection with the name <%= profilingConnectionName %></li>
-        <li>Create an action with this <a href="/public/profilingActionExample.js">example code</a>. Set secrets: AUTH0_DOMAIN and REDIRECT_SECRET (the same values you use in .env file.)</li>
+        <li>Create an action with this <a href="/public/profilingActionExample.js">example code</a> and set secrets:
+          <ul>
+            <li>AUTH0_DOMAIN (The same as the application environment variable.)</li>
+            <li>PROFILING_SESSION_SECRET (The same as the application environment variable.)</li>
+            <li>REDIRECT_TO (The "/profiling/input" route of the application.)</li>
+          </ul>
+        </li>
       </ul>
       <p><a href="/rwa/login/profiling">Login with progressive profiling</a></p>
   </section>
