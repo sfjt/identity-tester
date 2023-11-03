@@ -72,7 +72,7 @@ Rename `env.example` to `.env` and fill required information.
 | SPA_CLIENT_ID | The client ID of your SPA. |
 | API_IDENTIFIER | The API identifier of your external API. |
 
-### 3. Run the application
+### 3. Run your application
 
 Run `yarn install` then `yarn run local`
 
