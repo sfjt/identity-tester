@@ -60,7 +60,7 @@ Rename `env.example` to `.env` and fill required information.
 
 | Name | Description |
 | ---- | ---- |
-| CANONICAL_DOMAIN | The "canonical domain" meaning the default domain mame of your tenant. |
+| CANONICAL_DOMAIN | The "canonical domain" meaning the default domain name of your tenant. |
 | AUTH0_DOMAIN | Either the [custom domain](https://auth0.com/docs/customize/custom-domains) or the canonical domain of your tenant. |
 | RWA_CLIENT_ID | The client ID of your Regular Web Application (#1). |
 | RWA_CLIENT_SECRET | The client secret of your Regular Web Application (#1). |
