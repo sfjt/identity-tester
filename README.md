@@ -16,19 +16,65 @@ See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version.
 
 ## Quickstart
 
-1. Configure your Auth0 tenant. 
-    - Create a [Regular Web Application](https://auth0.com/docs/get-started/auth0-overview/create-applications/regular-web-apps) and a [SPA](https://auth0.com/docs/get-started/auth0-overview/create-applications/single-page-web-apps). Register an [external API](https://auth0.com/docs/get-started/auth0-overview/set-up-apis).
-    - Set Callback URLs.
-      - Regular Web Application:
-        ```
-        http://localhost/3000/rwa/callback, https://localhost/3000/rwa/callback
-        ```
-      - SPA: 
-        ```
-        http://localhost/3000/auth0spajs, http://localhost/3000/auth0js, http://localhost/3000/lock, https://localhost/3000/auth0spajs, https://localhost/3000/auth0js, https://localhost/3000/lock
-        ```
-2. Rename `env.example` to `.env` and fill required information.
-3. Run `yarn install` then `yarn run local`
+### 1. Configure your tenant
+
+#### Regular Web Application #1
+- Create a [Regular Web Application](https://auth0.com/docs/get-started/auth0-overview/create-applications/regular-web-apps).
+- Register callback URLs:
+  ```
+  http://localhost:3000/rwa/callback, https://localhost:3000/rwa/callback
+  ```
+- Register allowed logout URLs:
+  ```
+  http://localhost:3000/rwa, https://localhost:3000/rwa
+  ```
+
+#### SPA
+- Create a [SPA](https://auth0.com/docs/get-started/auth0-overview/create-applications/single-page-web-apps).
+- Register callback URLs and allowed logout URLs (use the same values):
+  ```
+  http://localhost:3000/auth0spajs, http://localhost:3000/auth0js, http://localhost:3000/lock, https://localhost:3000/auth0spajs, https://localhost:3000/auth0js, https://localhost:3000/lock
+  ```
+- Register allowed web origins:
+  ```
+  http://localhost:3000, https://localhost:3000
+  ```
+
+#### External API
+- Register an [external API](https://auth0.com/docs/get-started/auth0-overview/set-up-apis).
+
+#### Regular Web Application #2 for MFA Settings
+- Create another Regular Web Application [with the MFA grant type enabled](https://auth0.com/docs/get-started/applications/update-grant-types).
+- Register callback URLs:
+  ```
+  http://localhost:3000/mfa/callback, https://localhost:3000/mfa/callback
+  ```
+- Register allowed logout URLs:
+  ```
+  http://localhost:3000, https://localhost:3000
+  ```
+
+### 2. Configure your application
+
+Rename `env.example` to `.env` and fill required information.
+
+| Name | Description |
+| ---- | ---- |
+| CANONICAL_DOMAIN | The "canonical domain" meaning the default domain mame of your tenant. |
+| AUTH0_DOMAIN | Either the [custom domain](https://auth0.com/docs/customize/custom-domains) or the canonical domain of your tenant. |
+| RWA_CLIENT_ID | The client ID of your Regular Web Application (#1). |
+| RWA_CLIENT_SECRET | The client secret of your Regular Web Application (#1). |
+| RWA_SESSION_SECRET | A long random string used to encrypt the Regular Web Application (#1) session. |
+| MFA_SETTINGS_CLIENT_ID | The client ID of your Regular Web Application (#2). |
+| MFA_SETTINGS_CLIENT_SECRET | The client secret of your Regular Web Application (#2). |
+| MFA_SETTINGS_SESSION_SECRET | A long random string used to encrypt the Regular Web Application (#2) session. |
+| PROFILING_SESSION_SECRET | A long random string used to encrypt the [Progressive Profiling](https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/redirect-with-actions) session. |
+| SPA_CLIENT_ID | The client ID of your SPA. |
+| API_IDENTIFIER | The API identifier of your external API. |
+
+### 3. Run the application
+
+Run `yarn install` then `yarn run local`
 
 ## Test https on your local machine
 
@@ -42,4 +88,4 @@ You can save multiple environment variable files, for example, `.env.us`, `env.e
 
 The files with the name pattern `.env.*` except for `.env.example` will be git-ignored.
 
-Switch the set of environment variables by running `yarn run switchenv ".env.us"`. (It will overwrite .env file.)
+Switch the set of environment variables by running `yarn run switchenv ".env.us"`. (It will overwrite the exiting .env file.)
