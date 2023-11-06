@@ -12,6 +12,9 @@
         border-style: dotted;
         border-color: gray;
       }
+      button.deleteButton {
+        margin-left: 2em;
+      }
     </style>
     <title>MFA Settings</title>
   </head>
@@ -19,19 +22,24 @@
     <h1>MFA Settings</h1>
     <nav>
       <ul>
-        <li><a href="/mfa/logout?returnTo=">Logout</a></li>
+        <li><a href="/mfa/logout">Logout</a></li>
+      </ul>
+      <ul>
+        <li><a href="/mfa/totp">Configure TOTP MFA</a></li>
+        <li><a href="/mfa/email">Configure Email MFA</a></li>
       </ul>
       <%- include("./commonLinks.ejs", issuerBaseURL)%>
     </nav>
     <section>
       <dl>
         <% authenticators.forEach(function (v, _) { %>
-          <dt><%= v.id %></dt>
+          <dt data-authenticator-id="<%= v.id %>" id="<%= v.id %>" class="authenticatorId"><%= v.id %></dt>
           <dd>Type: <%= v.authenticator_type %></dd>
           <dd>OOB Channel: <%= v.oob_channel %></dd>
           <dd>Active: <%= v.active %></dd>
         <% }); %>
       </dl>
     </section>
+    <script src="/builds/mfa.bundle.js"></script>
   </body>
 </html>

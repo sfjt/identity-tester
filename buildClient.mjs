@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild"
 
-const filenames = ["auth0spajs", "auth0js", "lockPrep"]
+const filenames = ["auth0spajs", "auth0js", "lockPrep", "mfa"]
 
 const buildTasks = filenames.map((name) => {
   return esbuild.build({

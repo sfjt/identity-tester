@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      dt {
+        font-weight: bold;
+      }
+      nav {
+        margin-bottom: 2em;
+        border-width: 1px 0;
+        border-style: dotted;
+        border-color: gray;
+      }
+    </style>
+    <title>Email MFA Enrollment</title>
+  </head>
+  <body>
+    <h1>Email MFA Enrollment</h1>
+    <nav>
+      <ul>
+        <li><a href="/mfa">MFA Settings</a></li>
+      </ul>
+    </nav>
+    <p>A verification code has been sent to your email: <%= email %> </p>
+    <% if(verificationResult) { %>
+      <p>Verification Result: Successful</p>
+    <% } else { %>
+      <section>
+        <form action="/mfa/email/verify" method="POST">
+          <p>oob_code: <input value="<%= oobCode %>" name="oob_code"></p>
+          <p>binding_code (verification code): <input value="" name="binding_code"></p>
+          <p><button>Submit</button></p>
+        </form>
+      </section>
+    <% } %>
+  </body>
+</html>
