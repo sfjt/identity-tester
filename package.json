@@ -9,7 +9,9 @@
     "build": "node ./buildClient.mjs && node ./buildServer.mjs",
     "build:client": "node ./buildClient.mjs",
     "format": "prettier --write 'src/**/*ts' 'public/*.js' './*.mjs'",
-    "switchenv": "node ./switchenv.mjs"
+    "switchenv": "node ./switchenv.mjs",
+    "test:e2e": "playwright test",
+    "show-report": "playwright show-report"
   },
   "repository": "ssh://git@github.com/sfjt/identity-tester.git",
   "author": "sfjt <sho.foujita@gmail.com>",
@@ -30,8 +32,10 @@
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "^2.1.2",
+    "@playwright/test": "^1.39.0",
     "@types/cors": "^2.8.15",
     "@types/express": "^4.17.20",
+    "@types/node": "^20.9.0",
     "auth0-js": "^9.23.2",
     "esbuild": "^0.19.5",
     "nodemon": "^3.0.1",

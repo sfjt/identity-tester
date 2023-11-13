@@ -7,3 +7,7 @@ builds/
 
 /keys/**/*
 !/keys/.gitkeep
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

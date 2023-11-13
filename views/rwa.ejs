@@ -27,7 +27,7 @@
         <% if(isAuthenticated) { %>
         <li><a href="/rwa/logout">Logout</a></li>
         <%} else { %>
-        <li><a href="/rwa/login">Login</a></li>
+        <li><a href="/rwa/login" data-testid="simpleLogin">Login</a></li>
         <% } %>
       </ul>
       <%- include("./commonLinks.ejs", issuerBaseURL)%>
