@@ -19,10 +19,10 @@
     <h1>Test: SPA (auth0-spa-js)</h1>
     <nav>
       <div id="unauthorized">
-        <p><button id="loginButton">Login</button></p>
+        <p><button id="loginButton" data-testid="login">Login</button></p>
       </div>
       <div id="authorized" class="hide">
-        <p><button id="logoutButton">Logout</button></p>
+        <p><button id="logoutButton" data-testid="logout">Logout</button></p>
       </div>
       <p><button id="testSilentAuthButton">Test Silent Authentication</button></p>
       <p><button id="testExternalAPIButton">Test External API (apiAuthTest)</button></p>
@@ -32,9 +32,9 @@
       <h2>Tokens</h2>
       <dl>
         <dt>ID Token</dt>
-        <dd id="idToken"></dd>
+        <dd id="idToken"  data-testid="displayIDToken"></dd>
         <dt>Access Token</dt>
-        <dd id="accessToken"></dd>
+        <dd id="accessToken" data-testid="displayAccessToken"></dd>
         <dt>External API Response</dt>
         <dd id="externalAPIResponse"></dd>
       </dl>

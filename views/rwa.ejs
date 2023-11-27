@@ -25,7 +25,7 @@
     <nav>
       <ul>
         <% if(isAuthenticated) { %>
-        <li><a href="/rwa/logout">Logout</a></li>
+        <li><a href="/rwa/logout" data-testid="logout">Logout</a></li>
         <%} else { %>
         <li><a href="/rwa/login" data-testid="simpleLogin">Login</a></li>
         <% } %>
@@ -37,9 +37,9 @@
       <h2>Tokens</h2>
       <dl>
         <dt>ID Token</dt>
-        <dd><%= idToken %></dd>
+        <dd data-testid="displayIDToken"><%= idToken %></dd>
         <dt>Access Token</dt>
-        <dd><%= accessToken %></dd>
+        <dd data-testid="displayAccessToken"><%= accessToken %></dd>
       </dl>
     </section>
     <% } %>
