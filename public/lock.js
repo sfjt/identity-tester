@@ -35,14 +35,19 @@
           return
         }
         console.log("[checkSession]", authResult)
+        storeAuthResult(authResult)
         toggleButtonsVisibility(true)
-        const { accessToken, idToken } = authResult
-        tokenStore.accessToken = accessToken
-        tokenStore.idToken = idToken
+        const {accessToken, idToken} = tokenStore
         show("accessToken", accessToken ? accessToken : "N/A")
         show("idToken", idToken ? idToken : "N/A")
       },
     )
+  }
+
+  function storeAuthResult(authResult) {
+    const { idToken, accessToken } = authResult
+    tokenStore.accessToken = accessToken
+    tokenStore.idToken = idToken
   }
 
   const loginButton = document.getElementById("loginButton")
@@ -59,13 +64,16 @@
   testSilentAuthButton?.addEventListener("click", silentAuth)
   addAPIAuthTestEventListener(tokenStore)
 
-  lock.on("authenticated", (authResult) => {
+  lock.on("authenticated", function (authResult) {
     console.log("[on authenticated]", authResult)
-    const { idToken, accessToken } = authResult
-    tokenStore.accessToken = accessToken
-    tokenStore.idToken = idToken
+    storeAuthResult(authResult)
     toggleButtonsVisibility(true)
+    const {accessToken, idToken} = tokenStore
+    show("accessToken", accessToken ? accessToken : "N/A")
+    show("idToken", idToken ? idToken : "N/A")
   })
 
-  silentAuth()
+  if(!tokenStore.accessToken) {
+    silentAuth()
+  }
 })()

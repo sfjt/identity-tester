@@ -37,6 +37,7 @@ import {
   }
 
   function silentAuth() {
+    let result = false
     webAuth.checkSession(
       {
         prompt: "none",
@@ -48,14 +49,11 @@ import {
           return
         }
         console.log("[checkSession]", authResult)
-        toggleButtonsVisibility(true)
-        const { idToken, accessToken } = authResult
-        tokenStore.accessToken = accessToken
-        tokenStore.idToken = idToken
-        show("accessToken", accessToken ? accessToken : "N/A")
-        show("idToken", idToken ? idToken : "N/A")
+        storeAuthResult(authResult)
+        result = true
       },
     )
+    return result
   }
 
   const loginButton = document.getElementById("loginButton")
@@ -66,20 +64,34 @@ import {
   testSilentAuthButton?.addEventListener("click", silentAuth)
   addAPIAuthTestEventListener(tokenStore)
 
-  webAuth.parseHash({}, (err, authResult) => {
-    if (err) {
-      console.log("[parseHash]", err)
-      return
-    }
-    if (!authResult) {
-      console.log("[parseHash] authResult is empty.")
-      return
-    }
-    console.log("[parseHash]", authResult)
+  function parseHash() {
+    let result = false
+    webAuth.parseHash({}, (err, authResult) => {
+      if (err) {
+        console.log("[parseHash]", err)
+        return
+      }
+      if (!authResult) {
+        console.log("[parseHash] authResult is empty.")
+        return
+      }
+      console.log("[parseHash]", authResult)
+      storeAuthResult(authResult)
+      result = true
+    })
+    return result
+  }
+
+  function storeAuthResult(authResult: any) {
     const { idToken, accessToken } = authResult
     tokenStore.accessToken = accessToken
     tokenStore.idToken = idToken
-  })
+  }
 
-  silentAuth()
+  if(parseHash() || silentAuth()) {
+    const { idToken, accessToken } = tokenStore
+    toggleButtonsVisibility(true)
+    show("accessToken", accessToken ? accessToken : "N/A")
+    show("idToken", idToken ? idToken : "N/A")
+  }
 })()
