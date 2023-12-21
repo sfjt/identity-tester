@@ -21,8 +21,10 @@ import {
       audience: API_IDENTIFIER,
       scope: SCOPE,
     },
+    cacheLocation: "localstorage",
     useRefreshTokens: true,
     cookieDomain,
+    useRefreshTokensFallback: true,
   })
   window["__auth0Client"] = client
 
