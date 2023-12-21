@@ -51,6 +51,19 @@ rwaRouter.get("/login/custom", (req, res, next) => {
   })
 })
 
+rwaRouter.get("/logout/custom", (req, res, next) => {
+  console.log("logging out in with custom params", req.query)
+  const returnTo = req.query["returnTo"]?.toString()
+  const logoutParams = {
+    ...req.query
+  }
+  delete logoutParams["returnTo"]
+  res.oidc.logout({
+    returnTo,
+    logoutParams
+  })
+})
+
 rwaRouter.get("/login/profiling", (req, res, next) => {
   res.oidc.login({
     returnTo: BASE_URL,
