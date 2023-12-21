@@ -11,6 +11,8 @@ import {
   const config = await getConfig()
   const { AUTH0_DOMAIN, CLIENT_ID, SCOPE, API_IDENTIFIER } = config
 
+  const cookieDomain = AUTH0_DOMAIN.replace(AUTH0_DOMAIN.split(".")[0], "")
+  console.log("cookieDomain", cookieDomain)
   const client = await createAuth0Client({
     domain: AUTH0_DOMAIN,
     clientId: CLIENT_ID,
@@ -19,6 +21,9 @@ import {
       audience: API_IDENTIFIER,
       scope: SCOPE,
     },
+    cacheLocation: "localstorage",
+    useRefreshTokens: true,
+    cookieDomain,
   })
   window["__auth0Client"] = client
 
