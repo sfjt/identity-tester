@@ -21,7 +21,6 @@ import {
       audience: API_IDENTIFIER,
       scope: SCOPE,
     },
-    cacheLocation: "localstorage",
     useRefreshTokens: true,
     cookieDomain,
   })
