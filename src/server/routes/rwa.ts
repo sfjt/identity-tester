@@ -53,7 +53,7 @@ rwaRouter.get("/login/custom", (req, res, next) => {
     const domainName = baseUrl.host.split(".")
     domainName.unshift(orgName)
     const host = domainName.join(".")
-    const redirect_uri = `https://${host}/callback`
+    const redirect_uri = `https://${host}/rwa/callback`
     console.log("redirect_uri", redirect_uri)
     res.oidc.login({
       authorizationParams: {
