@@ -41,14 +41,32 @@ rwaRouter.get("/", (req, res, next) => {
   })
 })
 
-rwaRouter.get("/login/org", (req, res, next) => {
-  console.log("logging in with invitation params", req.query)
+rwaRouter.get("/login/custom", (req, res, next) => {
+  console.log("logging in with custom params", req.query)
+
+  // "Multi Tenancy Model" organization.
+  const orgId = req.query["organization"]?.toString() || ""
   const orgName = req.query["organization_name"]?.toString() || ""
-  const redirect_uri = BASE_URL.replace("test", orgName)
+  console.log("Organization: ", orgId, orgName)
+  if (orgName) {
+    const baseUrl = new URL(BASE_URL)
+    const domainName = baseUrl.host.split(".")
+    domainName.unshift(orgName)
+    const host = domainName.join(".")
+    const redirect_uri = `https://${host}/callback`
+    console.log("redirect_uri", redirect_uri)
+    res.oidc.login({
+      authorizationParams: {
+        ...req.query,
+        redirect_uri,
+      },
+    })
+    return
+  }
   res.oidc.login({
+    returnTo: BASE_URL,
     authorizationParams: {
       ...req.query,
-      redirect_uri
     },
   })
 })
