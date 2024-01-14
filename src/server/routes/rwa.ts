@@ -41,7 +41,19 @@ rwaRouter.get("/", (req, res, next) => {
   })
 })
 
-rwaRouter.get("/login/custom", (req, res, next) => {
+rwaRouter.get("/login/org", (req, res, next) => {
+  console.log("logging in with invitation params", req.query)
+  const orgName = req.query["organization_name"]?.toString() || ""
+  const returnTo = BASE_URL.replace("test", orgName)
+  res.oidc.login({
+    returnTo,
+    authorizationParams: {
+      ...req.query,
+    },
+  })
+})
+
+rwaRouter.get("/login/invitation", (req, res, next) => {
   console.log("logging in with custom params", req.query)
   res.oidc.login({
     returnTo: BASE_URL,
