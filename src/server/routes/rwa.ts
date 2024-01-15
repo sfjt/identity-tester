@@ -51,16 +51,6 @@ rwaRouter.get("/login/custom", (req, res, next) => {
   })
 })
 
-rwaRouter.get("/login/invitation", (req, res, next) => {
-  console.log("logging in with custom params", req.query)
-  res.oidc.login({
-    returnTo: BASE_URL,
-    authorizationParams: {
-      ...req.query,
-    },
-  })
-})
-
 rwaRouter.get("/logout/custom", (req, res, next) => {
   console.log("logging out in with custom params", req.query)
   const returnTo = req.query["returnTo"]?.toString()
