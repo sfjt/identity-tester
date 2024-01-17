@@ -50,6 +50,7 @@ import {
         }
         console.log("[checkSession]", authResult)
         storeAuthResult(authResult)
+        showTokens()
         result = true
       },
     )
@@ -77,6 +78,7 @@ import {
       }
       console.log("[parseHash]", authResult)
       storeAuthResult(authResult)
+      showTokens()
       result = true
     })
     return result
@@ -88,10 +90,13 @@ import {
     tokenStore.idToken = idToken
   }
 
-  if(parseHash() || silentAuth()) {
+  function showTokens() {
     const { idToken, accessToken } = tokenStore
-    toggleButtonsVisibility(true)
     show("accessToken", accessToken ? accessToken : "N/A")
     show("idToken", idToken ? idToken : "N/A")
+  }
+
+  if(parseHash() || silentAuth()) {
+    toggleButtonsVisibility(true)
   }
 })()
