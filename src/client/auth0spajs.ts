@@ -21,7 +21,6 @@ import {
       audience: API_IDENTIFIER,
       scope: SCOPE,
     },
-    cacheLocation: "localstorage",
     useRefreshTokens: true,
     cookieDomain,
     useRefreshTokensFallback: true,
@@ -34,10 +33,35 @@ import {
   }
   window["__tokenStore"] = tokenStore
 
-  async function login() {
+  async function loginWithRedirect() {
     await client.loginWithRedirect()
   }
 
+  async function loginWithPopup() {
+    try {
+      console.log("[loginWithPopup] Logging in.")
+      await client.loginWithPopup()
+    } catch (err) {
+      console.log("[loginWithPopup]", err)
+    }
+    await silentAuth()
+  }
+
+  async function getTokenWithPopup() {
+    try {
+      console.log("[getTokenWithPopup] Logging in.")
+      const accessToken = await client.getTokenWithPopup()
+      if (accessToken) {
+        toggleButtonsVisibility(true)
+        tokenStore.accessToken = accessToken
+        show("accessToken", accessToken ? accessToken : "N/A")
+      } 
+    } catch (err) {
+        console.log("[getTokenWithPopup]", err)
+        show("accessToken", "N/A")
+      }
+  }
+  
   async function loginWithCustomParams() {
     let params: any = {}
     try {
@@ -86,7 +110,11 @@ import {
   }
 
   const loginButton = document.getElementById("loginButton")
-  loginButton?.addEventListener("click", login)
+  loginButton?.addEventListener("click", loginWithRedirect)
+  const loginWithPopupButton = document.getElementById("loginWithPopupButton")
+  loginWithPopupButton?.addEventListener("click", loginWithPopup)
+  const getTokenWithPopupButton = document.getElementById("getTokenWithPopupButton")
+  getTokenWithPopupButton?.addEventListener("click", getTokenWithPopup)
   const logoutButton = document.getElementById("logoutButton")
   logoutButton?.addEventListener("click", logout)
   const loginWithCustomParamsButton = document.getElementById(
