@@ -15,20 +15,23 @@ exports.onExecutePostLogin = async (event, api) => {
     console.log("Skip profiling.")
     return
   }
-  console.log("Redirecting the user to:", REDIRECT_TO)
-  const token = api.redirect.encodeToken({
-    secret: PROFILING_SESSION_SECRET,
-    expiresInSeconds: 60,
-    payload: {
-      email: event.user.email,
-      externalUserId: "dummy|1234",
-      continue_uri: `https://${AUTH0_DOMAIN}/continue`,
-      state: event.request.query.state,
-    },
-  })
-  api.redirect.sendUserTo(REDIRECT_TO, {
-    query: { session_token: token },
-  })
+  const state = event?.transaction?.state
+  if(state) {
+    console.log("Redirecting the user to:", REDIRECT_TO)
+    const token = api.redirect.encodeToken({
+      secret: PROFILING_SESSION_SECRET,
+      expiresInSeconds: 60, 
+      payload: {
+        email: event.user.email,
+        externalUserId: "dummy|1234",
+        continue_uri: `https://${AUTH0_DOMAIN}/continue`,
+        state: state
+      },
+    })
+    api.redirect.sendUserTo(REDIRECT_TO, {
+      query: { session_token: token }
+    })
+  }
 }
 
 /**
@@ -39,7 +42,7 @@ exports.onExecutePostLogin = async (event, api) => {
  * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
  */
 exports.onContinuePostLogin = async (event, api) => {
-  const { AUTH0_DOMAIN } = event.secrets
+  const { AUTH0_DOMAIN, PROFILING_SESSION_SECRET } = event.secrets
   const prefix = `https://${AUTH0_DOMAIN}`
 
   console.log("===== ProgressiveProfiling RESUMED =====")
@@ -47,7 +50,7 @@ exports.onContinuePostLogin = async (event, api) => {
   api.user.setAppMetadata("profilingDone:", true)
 
   const payload = api.redirect.validateToken({
-    secret: event.secrets.PROFILING_SESSION_SECRET,
+    secret: PROFILING_SESSION_SECRET,
     tokenParameterName: "token",
   })
   console.log("payload:", payload)
