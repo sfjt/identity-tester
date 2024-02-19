@@ -26,7 +26,6 @@ const authConfig: ConfigParams = {
     response_type: "code",
     scope: SCOPE,
     audience: API_IDENTIFIER,
-    language: "ja"
   },
 }
 
