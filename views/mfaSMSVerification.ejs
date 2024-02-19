@@ -13,23 +13,24 @@
         border-color: gray;
       }
     </style>
-    <title>Email MFA Enrollment</title>
+    <title>SMS MFA Enrollment</title>
   </head>
   <body>
-    <h1>Email MFA Enrollment</h1>
+    <h1>SMS MFA Enrollment</h1>
     <nav>
       <ul>
         <li><a href="/mfa">MFA Settings</a></li>
       </ul>
     </nav>
-    <p>A verification code has been sent to your email: <%= email %> </p>
+    <p>A verification code has been sent to your phone: <%= phoneNumber %> </p>
     <% if(verificationResult) { %>
       <p><strong>Verification Result: Successful</strong></p>
     <% } else { %>
       <section>
-        <form action="/mfa/email/verify" method="POST">
+        <form action="/mfa/sms/verify" method="POST">
           <p>oob_code: <input value="<%= oobCode %>" name="oob_code"></p>
           <p>binding_code (verification code): <input value="" name="binding_code"></p>
+          <input type="hidden" value="<%= phoneNumber %>" name="phone_number">
           <p><button>Submit</button></p>
         </form>
       </section>

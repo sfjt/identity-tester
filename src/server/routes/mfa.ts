@@ -33,6 +33,57 @@ const logoutURL = `${BASE_URL}/logout`
 mfaSettingsRouter.use(auth(authConfig))
 
 mfaSettingsRouter.get(
+  "/",
+  requiresAuth(),
+  checkExpiredToken(logoutURL),
+  async (req, res, next) => {
+    const { accessToken } = req.oidc
+    console.log("accessToken:", accessToken?.access_token)
+    let authenticators = {}
+    try {
+      const resp = await axios.get(`${AUDIENCE}authenticators`, {
+        headers: {
+          Authorization: `Bearer ${accessToken?.access_token}`,
+        },
+      })
+      authenticators = resp.data
+    } catch (err) {
+      next(err)
+    }
+    res.render("./mfa.ejs", {
+      issuerBaseURL: ISSUER_BASE_URL,
+      authenticators,
+    })
+  },
+)
+
+mfaSettingsRouter.delete(
+  "/delete/:authenticator_id",
+  requiresAuth(),
+  checkExpiredToken(logoutURL),
+  async (req, res, next) => {
+    const { accessToken } = req.oidc
+    const authenticatorID = req.params["authenticator_id"]
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${accessToken?.access_token}`,
+      },
+    }
+    console.log("authenticatorID", authenticatorID)
+    axios
+      .delete(`${AUDIENCE}authenticators/${authenticatorID}`, headers)
+      .then((resp) => {
+        console.log("Deleted an authenticator", authenticatorID, resp.status)
+        res.sendStatus(resp.status)
+      })
+      .catch((err) => {
+        console.log("Could not delete an authenticator", authenticatorID, err)
+        res.sendStatus(500)
+      })
+  },
+)
+
+mfaSettingsRouter.get(
   "/email",
   requiresAuth(),
   checkExpiredToken(logoutURL),
@@ -198,53 +249,93 @@ mfaSettingsRouter.post(
 )
 
 mfaSettingsRouter.get(
-  "/",
+  "/sms",
   requiresAuth(),
   checkExpiredToken(logoutURL),
   async (req, res, next) => {
+    res.render("./mfaSMSEnrollment.ejs")
+  },
+)
+
+mfaSettingsRouter.post(
+  "/sms/enroll",
+  requiresAuth(),
+  checkExpiredToken(logoutURL),
+  async (req, res, next) => {
+    const phoneNumber = req.body["phone_number"] || ""
     const { accessToken } = req.oidc
-    console.log("accessToken:", accessToken?.access_token)
-    let authenticators = {}
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${accessToken?.access_token}`,
+        "Content-Type": "application/json",
+      },
+    }
+    const payload = {
+      authenticator_types: ["oob"],
+      oob_channels: ["sms"],
+      phone_number: phoneNumber
+    }
+    let oobCode = ""
     try {
-      const resp = await axios.get(`${AUDIENCE}authenticators`, {
-        headers: {
-          Authorization: `Bearer ${accessToken?.access_token}`,
-        },
-      })
-      authenticators = resp.data
+      const resp = await axios.post(`${AUDIENCE}associate`, payload, headers)
+      oobCode = resp.data["oob_code"] || ""
     } catch (err) {
       next(err)
     }
-    res.render("./mfa.ejs", {
-      issuerBaseURL: ISSUER_BASE_URL,
-      authenticators,
+    res.render("./mfaSMSVerification.ejs", {
+      verificationResult: false,
+      oobCode,
+      phoneNumber
     })
   },
 )
 
-mfaSettingsRouter.delete(
-  "/delete/:authenticator_id",
+mfaSettingsRouter.post(
+  "/sms/verify",
   requiresAuth(),
   checkExpiredToken(logoutURL),
   async (req, res, next) => {
     const { accessToken } = req.oidc
-    const authenticatorID = req.params["authenticator_id"]
+    const oobCode = req.body["oob_code"] || ""
+    const bindingCode = req.body["binding_code"] || ""
+    const phoneNumber = req.body["phone_number"] || ""
     const headers = {
       headers: {
-        Authorization: `Bearer ${accessToken?.access_token}`,
+        "Content-Type": "application/json",
       },
     }
-    console.log("authenticatorID", authenticatorID)
-    axios
-      .delete(`${AUDIENCE}authenticators/${authenticatorID}`, headers)
-      .then((resp) => {
-        console.log("Deleted an authenticator", authenticatorID, resp.status)
-        res.sendStatus(resp.status)
+    const payload = {
+      grant_type: "http://auth0.com/oauth/grant-type/mfa-oob",
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      mfa_token: accessToken?.access_token || "",
+      oob_code: oobCode,
+      binding_code: bindingCode,
+    }
+    try {
+      const resp = await axios.post(
+        `${ISSUER_BASE_URL}/oauth/token`,
+        payload,
+        headers,
+      )
+      if (!resp.data["access_token"]) {
+        console.error(resp.status)
+        throw new Error("Invalid code")
+      }
+    } catch (err) {
+      console.error(err)
+      res.render("./mfaSMSVerification.ejs", {
+        verificationResult: false,
+        oobCode,
+        phoneNumber,
       })
-      .catch((err) => {
-        console.log("Could not delete an authenticator", authenticatorID, err)
-        res.sendStatus(500)
-      })
+      return
+    }
+    res.render("./mfaSMSVerification.ejs", {
+      verificationResult: true,
+      oobCode: "",
+      phoneNumber,
+    })
   },
 )
 
