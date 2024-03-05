@@ -55,13 +55,13 @@ import {
         toggleButtonsVisibility(true)
         tokenStore.accessToken = accessToken
         show("accessToken", accessToken ? accessToken : "N/A")
-      } 
-    } catch (err) {
-        console.log("[getTokenWithPopup]", err)
-        show("accessToken", "N/A")
       }
+    } catch (err) {
+      console.log("[getTokenWithPopup]", err)
+      show("accessToken", "N/A")
+    }
   }
-  
+
   async function loginWithCustomParams() {
     let params: any = {}
     try {
@@ -113,7 +113,9 @@ import {
   loginButton?.addEventListener("click", loginWithRedirect)
   const loginWithPopupButton = document.getElementById("loginWithPopupButton")
   loginWithPopupButton?.addEventListener("click", loginWithPopup)
-  const getTokenWithPopupButton = document.getElementById("getTokenWithPopupButton")
+  const getTokenWithPopupButton = document.getElementById(
+    "getTokenWithPopupButton",
+  )
   getTokenWithPopupButton?.addEventListener("click", getTokenWithPopup)
   const logoutButton = document.getElementById("logoutButton")
   logoutButton?.addEventListener("click", logout)

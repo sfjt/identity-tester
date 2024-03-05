@@ -96,7 +96,7 @@ import {
     show("idToken", idToken ? idToken : "N/A")
   }
 
-  if(parseHash() || silentAuth()) {
+  if (parseHash() || silentAuth()) {
     toggleButtonsVisibility(true)
   }
 })()

@@ -16,20 +16,20 @@ exports.onExecutePostLogin = async (event, api) => {
     return
   }
   const state = event?.transaction?.state
-  if(state) {
+  if (state) {
     console.log("Redirecting the user to:", REDIRECT_TO)
     const token = api.redirect.encodeToken({
       secret: PROFILING_SESSION_SECRET,
-      expiresInSeconds: 60, 
+      expiresInSeconds: 60,
       payload: {
         email: event.user.email,
         externalUserId: "dummy|1234",
         continue_uri: `https://${AUTH0_DOMAIN}/continue`,
-        state: state
+        state: state,
       },
     })
     api.redirect.sendUserTo(REDIRECT_TO, {
-      query: { session_token: token }
+      query: { session_token: token },
     })
   }
 }

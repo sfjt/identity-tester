@@ -90,7 +90,7 @@ mfaSettingsRouter.get(
   async (req, res, next) => {
     const { accessToken } = req.oidc
     const email = req.oidc.user?.email
-    if(!email) {
+    if (!email) {
       next("Email required")
     }
     let oobCode = ""
@@ -114,7 +114,7 @@ mfaSettingsRouter.get(
     res.render("./mfaEmail.ejs", {
       verificationResult: false,
       oobCode,
-      email
+      email,
     })
   },
 )
@@ -273,7 +273,7 @@ mfaSettingsRouter.post(
     const payload = {
       authenticator_types: ["oob"],
       oob_channels: ["sms"],
-      phone_number: phoneNumber
+      phone_number: phoneNumber,
     }
     let oobCode = ""
     try {
@@ -285,7 +285,7 @@ mfaSettingsRouter.post(
     res.render("./mfaSMSVerification.ejs", {
       verificationResult: false,
       oobCode,
-      phoneNumber
+      phoneNumber,
     })
   },
 )

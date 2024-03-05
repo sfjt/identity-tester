@@ -37,7 +37,7 @@
         console.log("[checkSession]", authResult)
         storeAuthResult(authResult)
         toggleButtonsVisibility(true)
-        const {accessToken, idToken} = tokenStore
+        const { accessToken, idToken } = tokenStore
         show("accessToken", accessToken ? accessToken : "N/A")
         show("idToken", idToken ? idToken : "N/A")
       },
@@ -68,12 +68,12 @@
     console.log("[on authenticated]", authResult)
     storeAuthResult(authResult)
     toggleButtonsVisibility(true)
-    const {accessToken, idToken} = tokenStore
+    const { accessToken, idToken } = tokenStore
     show("accessToken", accessToken ? accessToken : "N/A")
     show("idToken", idToken ? idToken : "N/A")
   })
 
-  if(!tokenStore.accessToken) {
+  if (!tokenStore.accessToken) {
     silentAuth()
   }
 })()
