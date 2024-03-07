@@ -4,6 +4,7 @@ import axios from "axios"
 
 import config from "../config"
 import { checkExpiredToken } from "../middlewares/checkExpiredToken"
+import errorHandler from "../middlewares/errorHandler"
 
 const mfaSettingsRouter = express.Router()
 
@@ -338,5 +339,7 @@ mfaSettingsRouter.post(
     })
   },
 )
+
+mfaSettingsRouter.use(errorHandler)
 
 export default mfaSettingsRouter

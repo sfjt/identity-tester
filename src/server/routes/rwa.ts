@@ -55,12 +55,12 @@ rwaRouter.get("/logout/custom", (req, res, next) => {
   console.log("logging out in with custom params", req.query)
   const returnTo = req.query["returnTo"]?.toString()
   const logoutParams = {
-    ...req.query
+    ...req.query,
   }
   delete logoutParams["returnTo"]
   res.oidc.logout({
     returnTo,
-    logoutParams
+    logoutParams,
   })
 })
 
@@ -99,6 +99,10 @@ rwaRouter.post(
     })
   },
 )
+
+rwaRouter.get("/logout/federated", (req, res, next) => {
+  res.redirect("https://auth.flyingsobamonster.com/v2/logout?federated")
+})
 
 rwaRouter.use(errorHandler)
 
