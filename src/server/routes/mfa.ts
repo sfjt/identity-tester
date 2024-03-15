@@ -40,7 +40,7 @@ mfaSettingsRouter.get(
   async (req, res, next) => {
     const { accessToken } = req.oidc
     console.log("accessToken:", accessToken?.access_token)
-    let authenticators = {}
+    let authenticators: any[] = new Array()
     try {
       const resp = await axios.get(`${AUDIENCE}authenticators`, {
         headers: {
