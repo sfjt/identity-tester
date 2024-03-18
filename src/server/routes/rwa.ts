@@ -11,7 +11,7 @@ import errorHandler from "../middlewares/errorHandler"
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
-const { ISSUER_BASE_URL, AUTH0_DOMAIN } = config.global
+const { ISSUER_BASE_URL } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL } = config.rwa
 const { API_IDENTIFIER } = config.api
 const authConfig: ConfigParams = {
@@ -103,8 +103,8 @@ rwaRouter.post(
 rwaRouter.get("/logout/federated", (req, res, next) => {
   res.oidc.logout({
     logoutParams: {
-      federated: true
-    }
+      federated: true,
+    },
   })
 })
 
