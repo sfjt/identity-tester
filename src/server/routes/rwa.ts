@@ -101,7 +101,11 @@ rwaRouter.post(
 )
 
 rwaRouter.get("/logout/federated", (req, res, next) => {
-  res.redirect(`https://${AUTH0_DOMAIN}/v2/logout?federated`)
+  res.oidc.logout({
+    logoutParams: {
+      federated: true
+    }
+  })
 })
 
 rwaRouter.use(errorHandler)
