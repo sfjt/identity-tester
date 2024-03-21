@@ -8,6 +8,7 @@ const CANONICAL_DOMAIN = getEnv("CANONICAL_DOMAIN")
 const config = {
   global: {
     AUTH0_DOMAIN,
+    CANONICAL_DOMAIN,
     HOSTNAME,
     PORT,
     ISSUER_BASE_URL: `https://${AUTH0_DOMAIN}`,
@@ -46,6 +47,10 @@ const config = {
   },
   api: {
     API_IDENTIFIER: getEnv("API_IDENTIFIER"),
+  },
+  m2m: {
+    M2M_CLIENT_ID: getEnv("M2M_CLIENT_ID"),
+    M2M_CLIENT_SECRET: getEnv("M2M_CLIENT_SECRET"),
   },
 }
 

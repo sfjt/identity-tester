@@ -71,6 +71,8 @@ Rename `env.example` to `.env` and fill required information.
 | PROFILING_SESSION_SECRET | A long random string used to encrypt the [Progressive Profiling](https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/redirect-with-actions) session. |
 | SPA_CLIENT_ID | The client ID of your SPA. |
 | API_IDENTIFIER | The API identifier of your external API. |
+| M2M_CLIENT_ID | The client ID of your Machine to Machine client. |
+| M2M_CLIENT_SECRET | The client secret of your Machine to Machine client. |
 | E2E_TEST_USERNAME | A username for Playwright E2E testing. You have to create a user and go turhough the concent screen before running tests. |
 | E2E_TEST_PASSWORD | A password for Playwright E2E testing. |
 

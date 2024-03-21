@@ -8,9 +8,9 @@
     "local:https": "yarn run build:client && NODE_ENV=devhttps NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" nodemon ./src/server/server.ts",
     "build": "node ./buildClient.mjs && node ./buildServer.mjs",
     "build:client": "node ./buildClient.mjs",
-    "format": "prettier --write 'src/**/*ts' 'public/*.js' './*.mjs'",
+    "format": "prettier --write 'src/**/*.ts' 'public/*.js' './*.mjs' 'tests/**/*.ts'",
     "switchenv": "node ./switchenv.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --config=tests/playwright.config.ts",
     "show-report": "playwright show-report"
   },
   "repository": "ssh://git@github.com/sfjt/identity-tester.git",
@@ -20,6 +20,7 @@
     "node": "^20"
   },
   "dependencies": {
+    "auth0": "^4.3.1",
     "axios": "^1.6.7",
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
