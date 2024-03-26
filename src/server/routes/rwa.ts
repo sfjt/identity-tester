@@ -37,7 +37,7 @@ if(REDIS_URL) {
     url: REDIS_URL,
     legacyMode: true,
   })
-  redisClient.connect()
+  await redisClient.connect()
   authConfig = {
     ...authConfig,
     idpLogout: true,
