@@ -1,5 +1,7 @@
 import express from "express"
 import { auth, ConfigParams } from "express-openid-connect"
+import { createClient } from "redis"
+import RedisStore from "connect-redis"
 
 import config from "../config"
 import {
@@ -14,7 +16,7 @@ const PROFILING_CONNECTION_NAME = "profiling"
 const { ISSUER_BASE_URL } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL } = config.rwa
 const { API_IDENTIFIER } = config.api
-const authConfig: ConfigParams = {
+let authConfig: ConfigParams = {
   authRequired: false,
   auth0Logout: true,
   clientID: CLIENT_ID,
@@ -27,6 +29,22 @@ const authConfig: ConfigParams = {
     scope: SCOPE,
     audience: API_IDENTIFIER,
   },
+}
+
+const { REDIS_URL }  = process.env
+if(REDIS_URL) {
+  const redisClient = createClient({
+    url: REDIS_URL,
+    legacyMode: true,
+  })
+  redisClient.connect()
+  authConfig = {
+    ...authConfig,
+    idpLogout: true,
+    backchannelLogout: {
+      store: new RedisStore({ client: redisClient }),
+    }
+  }
 }
 
 rwaRouter.use(auth(authConfig))
