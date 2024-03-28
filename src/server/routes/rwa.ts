@@ -28,7 +28,7 @@ const authConfig: ConfigParams = {
     response_type: "code",
     scope: SCOPE,
     audience: API_IDENTIFIER,
-  },
+  }
 }
 
 const { REDIS_URL } = process.env
@@ -38,10 +38,9 @@ if (REDIS_URL) {
   })
   redisClient.connect().catch(console.log)
   authConfig.idpLogout = true
-  authConfig.session = {
+  authConfig.backchannelLogout = {
     store: new RedisStore({ client: redisClient }),
   }
-  authConfig.backchannelLogout = true
 }
 
 rwaRouter.use(auth(authConfig))
