@@ -35,6 +35,7 @@ const { REDIS_URL } = process.env
 if (REDIS_URL) {
   let redisClient = createClient({
     url: REDIS_URL,
+    legacyMode: true,
   })
   redisClient.connect().catch(console.log)
   authConfig.idpLogout = true
