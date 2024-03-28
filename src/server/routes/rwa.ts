@@ -1,6 +1,6 @@
 import express from "express"
 import { auth, ConfigParams } from "express-openid-connect"
-import {createClient} from "redis"
+import { createClient } from "redis"
 import RedisStore from "connect-redis"
 
 import config from "../config"
@@ -39,7 +39,7 @@ if (REDIS_URL) {
   redisClient.connect().catch(console.log)
   authConfig.idpLogout = true
   authConfig.session = {
-      store: new RedisStore({ client: redisClient }),
+    store: new RedisStore({ client: redisClient }),
   }
   authConfig.backchannelLogout = true
 }
@@ -124,6 +124,5 @@ rwaRouter.get("/logout/federated", (req, res, next) => {
 })
 
 rwaRouter.use(errorHandler)
-
 
 export default rwaRouter

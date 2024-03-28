@@ -1,7 +1,10 @@
 import { test, expect } from "@playwright/test"
 
 import { testUserCredentials } from "./testUser.ts"
-import { loginWithUsernamePassword, handleConsent } from "./loginWithUsernamePassword"
+import {
+  loginWithUsernamePassword,
+  handleConsent,
+} from "./loginWithUsernamePassword"
 
 const { E2E_TEST_USERNAME, E2E_TEST_PASSWORD } = testUserCredentials()
 

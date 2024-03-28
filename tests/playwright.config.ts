@@ -8,10 +8,10 @@ export default defineConfig({
     },
     {
       name: "Chromium",
-      testDir: '../tests',
+      testDir: "../tests",
       use: {
-        browserName: 'chromium',
-      }
-    }
+        browserName: "chromium",
+      },
+    },
   ],
 })

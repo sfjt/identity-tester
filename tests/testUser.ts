@@ -19,7 +19,9 @@ export function testUserCredentials() {
 }
 
 export async function ensureE2ETestUserExists(email: string, password: string) {
-  const resGetByEmail = await managementClient.usersByEmail.getByEmail({ email })
+  const resGetByEmail = await managementClient.usersByEmail.getByEmail({
+    email,
+  })
   if (!resGetByEmail.data.length) {
     try {
       await managementClient.users.create({
@@ -28,7 +30,7 @@ export async function ensureE2ETestUserExists(email: string, password: string) {
         connection: "Username-Password-Authentication",
       })
     } catch (e: any) {
-      if(e.msg === "The user already exists.") {
+      if (e.msg === "The user already exists.") {
         // Ignore the error.
         // There can be race conditions because the tests will run in parallel.
       } else {

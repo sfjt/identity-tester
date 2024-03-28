@@ -11,7 +11,7 @@ export async function loginWithUsernamePassword(
 }
 
 export async function handleConsent(page: Page) {
-  if (await page.getByText("Authorize App").isVisible()){
+  if (await page.getByText("Authorize App").isVisible()) {
     await page.locator("button[type='submit'][value='accept']").click()
   }
 }
