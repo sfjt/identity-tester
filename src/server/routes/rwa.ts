@@ -1,7 +1,5 @@
 import express from "express"
 import { auth, ConfigParams } from "express-openid-connect"
-import { createClient } from "redis"
-import RedisStore from "connect-redis"
 
 import config from "../config"
 import {
@@ -28,19 +26,6 @@ const authConfig: ConfigParams = {
     response_type: "code",
     scope: SCOPE,
     audience: API_IDENTIFIER,
-  }
-}
-
-const { REDIS_URL } = process.env
-if (REDIS_URL) {
-  let redisClient = createClient({
-    url: REDIS_URL,
-    legacyMode: true,
-  })
-  redisClient.connect().catch(console.log)
-  authConfig.idpLogout = true
-  authConfig.backchannelLogout = {
-    store: new RedisStore({ client: redisClient }),
   }
 }
 
