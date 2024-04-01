@@ -4,8 +4,8 @@
   "description": "Auth0 all in one tester.",
   "scripts": {
     "start": "NODE_ENV=prod node ./builds/server/server.bundle.js",
-    "local": "yarn run build:client && NODE_ENV=dev nodemon ./src/server/server.ts",
-    "local:https": "yarn run build:client && NODE_ENV=devhttps NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" nodemon ./src/server/server.ts",
+    "local": "npm run build:client && NODE_ENV=dev nodemon ./src/server/server.ts",
+    "local:https": "npm run build:client && NODE_ENV=devhttps NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" nodemon ./src/server/server.ts",
     "build": "node ./buildClient.mjs && node ./buildServer.mjs",
     "build:client": "node ./buildClient.mjs",
     "format": "prettier --write 'src/**/*.ts' 'public/*.js' './*.mjs' 'tests/**/*.ts'",

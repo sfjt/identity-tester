@@ -8,11 +8,9 @@ Do not copy and paste the code in production without thorough reviewing and test
 
 ## Prerequisites
 
-See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version.
-
-- An [Auth0](https://auth0.com/) tenant
-- [yarn](https://yarnpkg.com/)
-- [mkcert](https://github.com/FiloSottile/mkcert) (Only if you want to test with https locally)
+- An [Auth0](https://auth0.com/) tenant.
+- Node.js
+  - See the `.nvmrc` file for the [Node.js](https://nodejs.org/en) version. 
 
 ## Quickstart
 
@@ -78,13 +76,7 @@ Rename `env.example` to `.env` and fill required information.
 
 ### 3. Run your application
 
-Run `yarn install` then `yarn run local`
-
-## Test https on your local machine
-
-1. Install [mkcert](https://github.com/FiloSottile/mkcert). And trust the mkcert Root CA.
-2. Create a certificate and a key for localhost (localhost.pem and localhost-key.pem,) place them under `./keys` directory.
-3. Run `yarn run local:https`
+Run `npm install` then `npm run local`
 
 ## Switch environment variables
 
@@ -92,4 +84,4 @@ You can save multiple environment variable files, for example, `.env.us`, `env.e
 
 The files with the name pattern `.env.*` except for `.env.example` will be git-ignored.
 
-Switch the set of environment variables by running `yarn run switchenv ".env.us"`. (It will overwrite the exiting .env file.)
+Switch the set of environment variables by running `npm run switchenv ".env.us"`. (It will overwrite the exiting .env file.)
