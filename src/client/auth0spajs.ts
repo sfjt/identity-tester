@@ -1,4 +1,4 @@
-import { createAuth0Client } from "@auth0/auth0-spa-js"
+import { createAuth0Client, PopupTimeoutError } from "@auth0/auth0-spa-js"
 
 import {
   getConfig,
@@ -43,6 +43,10 @@ import {
       await client.loginWithPopup()
     } catch (err) {
       console.log("[loginWithPopup]", err)
+      if(err instanceof PopupTimeoutError) {
+        err.popup.close();
+      }
+
     }
     await silentAuth()
   }
