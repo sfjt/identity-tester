@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/public/favicon.ico">
+    <style>
+      dt {
+        font-weight: bold;
+      }
+      nav {
+        border-width: 1px 0;
+        border-style: dotted;
+        border-color: gray;
+      }
+      pre {
+        background-color: lightgray;
+        padding: 1em;
+        border-left: 3px solid black;
+        width: 100%;
+      }
+    </style>
+    <title>Test: FGA - Fine Grained Authorization</title>
+  </head>
+  <body>
+    <h1>Test: FGA - Fine Grained Authorization</h1>
+    <nav>
+      <ul>
+        <li><a href="/rwa">../</a></li>
+        <% if(isAuthenticated) { %>
+        <li><a href="/rwa/logout" data-testid="logout">Logout</a></li>
+        <%} else { %>
+        <li><a href="/rwa/login" data-testid="simpleLogin">Login</a></li>
+        <% } %>
+      </ul>
+      <%- include("./commonLinks.ejs", issuerBaseURL)%>
+    </nav>
+    <section>
+      <h2>Example Model:</h2>
+      <code>
+        <pre>
+model
+  schema 1.1
+
+type user
+
+type doc
+  relations
+    define can_change_owner: owner
+    define can_edit_viewer: owner
+    define can_read: viewer or owner
+    define can_write: owner
+    define owner: [user]
+    define viewer: [user, user:*]
+        </pre>
+      </code>
+    </section>
+    <section>
+      <h2>Your Object: <%= objectName %></h2>
+      <h3>Viewers</h3>
+      <ul>
+        <% for (let i = 0; i < listViewers.length; i++) { %>
+        <li> <%= listViewers[i] %> </li>
+        <% } %>
+      </ul>
+    </section>
+</html>

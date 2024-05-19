@@ -1,5 +1,6 @@
 import express from "express"
 import { auth, ConfigParams } from "express-openid-connect"
+import { OpenFgaClient, CredentialsMethod } from '@openfga/sdk'
 
 import config from "../config"
 import {
@@ -14,6 +15,7 @@ const PROFILING_CONNECTION_NAME = "profiling"
 const { ISSUER_BASE_URL } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL } = config.rwa
 const { API_IDENTIFIER } = config.api
+const {FGA_API_URL, FGA_STORE_ID, FGA_API_TOKEN_ISSUER, FGA_API_AUDIENCE, FGA_CLIENT_ID, FGA_CLIENT_SECRET} = config.fga
 const authConfig: ConfigParams = {
   authRequired: false,
   auth0Logout: true,
@@ -29,6 +31,20 @@ const authConfig: ConfigParams = {
   }
 }
 
+const fgaClient = new OpenFgaClient({
+  apiUrl: FGA_API_URL,
+  storeId: FGA_STORE_ID,
+  credentials: {
+    method: CredentialsMethod.ClientCredentials,
+    config: {
+      apiTokenIssuer: FGA_API_TOKEN_ISSUER,
+      apiAudience: FGA_API_AUDIENCE,
+      clientId: FGA_CLIENT_ID,
+      clientSecret: FGA_CLIENT_SECRET,
+    }
+  }
+});
+
 rwaRouter.use(auth(authConfig))
 
 rwaRouter.get("/", (req, res, next) => {
@@ -38,6 +54,41 @@ rwaRouter.get("/", (req, res, next) => {
     accessToken: req.oidc.accessToken?.access_token,
     profilingConnectionName: PROFILING_CONNECTION_NAME,
     issuerBaseURL: ISSUER_BASE_URL,
+  })
+})
+
+rwaRouter.get("/fga", async (req, res, next) => {
+  const sub = req.oidc.user?.sub
+  let listViewers: Array<string> = []
+  let objectName = ""
+  if (sub) {
+    const user = `user:${sub}`
+    const object = objectName = `doc:${sub}-default`
+    const defaultObject = {
+      user,
+      relation: "owner",
+      object,
+    }
+    const check = await fgaClient.check(defaultObject)
+    const defaultObjectExists= check.allowed || false
+    if(!defaultObjectExists) {
+      await fgaClient.writeTuples([defaultObject])
+    }
+    const expand = await fgaClient.expand({
+      object,
+      relation: "viewer"
+    })
+    const users = expand.tree?.root?.leaf?.users?.users
+    if(users && users.length > 0) {
+      listViewers = users
+    }
+  }
+
+  res.render("./fga.ejs", {
+    isAuthenticated: req.oidc.isAuthenticated(),
+    issuerBaseURL: ISSUER_BASE_URL,
+    listViewers,
+    objectName,
   })
 })
 

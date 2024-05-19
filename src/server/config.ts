@@ -52,6 +52,14 @@ const config = {
     M2M_CLIENT_ID: getEnv("M2M_CLIENT_ID"),
     M2M_CLIENT_SECRET: getEnv("M2M_CLIENT_SECRET"),
   },
+  fga: {
+    FGA_API_URL: getEnv("FGA_API_URL"),
+    FGA_API_AUDIENCE: getEnv("FGA_API_AUDIENCE"),
+    FGA_API_TOKEN_ISSUER: getEnv("FGA_API_TOKEN_ISSUER"),
+    FGA_STORE_ID: getEnv("FGA_STORE_ID"),
+    FGA_CLIENT_ID: getEnv("FGA_CLIENT_ID"),
+    FGA_CLIENT_SECRET: getEnv("FGA_CLIENT_SECRET"),
+  }
 }
 
 function getEnv(name: string, defaultValue = ""): string {
