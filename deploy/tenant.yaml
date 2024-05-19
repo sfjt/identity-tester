@@ -63,7 +63,6 @@ clients:
     app_type: regular_web
     callbacks:
       - http://localhost:3000/rwa/callback
-      - https://localhost:3000/rwa/callback
     client_aliases: []
     cross_origin_auth: false
     cross_origin_authentication: true
@@ -72,6 +71,7 @@ clients:
       - authorization_code
       - refresh_token
       - client_credentials
+      - implicit
     is_first_party: true
     is_token_endpoint_ip_header_trusted: true
     jwt_configuration:
@@ -84,7 +84,15 @@ clients:
         enabled: false
       facebook:
         enabled: false
+    oidc_backchannel_logout:
+      backchannel_logout_initiators:
+        mode: all
+      backchannel_logout_urls: []
     oidc_conformant: true
+    oidc_logout:
+      backchannel_logout_initiators:
+        mode: all
+      backchannel_logout_urls: []
     organization_require_behavior: no_prompt
     organization_usage: deny
     refresh_token:
@@ -107,9 +115,7 @@ clients:
       - https://localhost:3000/spa/auth0spajs
       - https://localhost:3000/spa/auth0js
       - https://localhost:3000/spa/lock
-    allowed_origins:
-      - http://localhost:3000/
-      - https://localhost:3000/
+    allowed_origins: []
     app_type: spa
     callbacks:
       - http://localhost:3000/spa/auth0spajs
@@ -120,11 +126,12 @@ clients:
       - https://localhost:3000/spa/lock
     client_aliases: []
     cross_origin_auth: false
-    cross_origin_authentication: true
+    cross_origin_authentication: false
     custom_login_page_on: true
     grant_types:
       - authorization_code
       - refresh_token
+      - implicit
     is_first_party: true
     is_token_endpoint_ip_header_trusted: false
     jwt_configuration:
@@ -141,16 +148,14 @@ clients:
     refresh_token:
       expiration_type: expiring
       leeway: 0
-      token_lifetime: 1200
-      idle_token_lifetime: 1000
+      token_lifetime: 7200
+      idle_token_lifetime: 7000
       infinite_token_lifetime: false
       infinite_idle_token_lifetime: false
       rotation_type: rotating
     sso_disabled: false
     token_endpoint_auth_method: none
-    web_origins:
-      - http://localhost:3000
-      - https://localhost:3000
+    web_origins: []
   - name: m2m-test
     app_type: non_interactive
     cross_origin_auth: false

@@ -2,5 +2,6 @@
   "AUTH0_DOMAIN": "<YOUR_TENANT_DOMAIN>",
   "AUTH0_CLIENT_ID": "<YOUR_CLIENT_ID>",
   "AUTH0_CLIENT_SECRET": "<YOUR_CLIENT_ID>",
-  "AUTH0_ALLOW_DELETE": false
+  "AUTH0_ALLOW_DELETE": false,
+  "AUTH0_INCLUDED_ONLY": ["resourceServers", "clients", "databases", "clientGrants"]
 }
