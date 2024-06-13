@@ -41,7 +41,6 @@ if (SESSION_STORE === "redis") {
     redisClientOptions.url = redisUrl
   }
   let redisClient = createClient(redisClientOptions)
-
   redisClient.connect().catch(console.error)
   authConfig.session = {
     store: new RedisStore({ client: redisClient })
