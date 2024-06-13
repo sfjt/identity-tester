@@ -1,7 +1,7 @@
 import express from "express"
 import { auth, ConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
-import connectRedis from "connect-redis"
+import RedisStore from "connect-redis"
 import { OpenFgaClient, CredentialsMethod } from '@openfga/sdk'
 
 import config from "../config"
@@ -35,18 +35,16 @@ const authConfig: ConfigParams = {
 }
 
 if (SESSION_STORE === "redis") {
-  const RedisStore = connectRedis(auth)
+  const redisClientOptions: RedisClientOptions = {}
   const redisUrl = process.env.REDIS_URL
-  const redisClientOptions: RedisClientOptions = { 
-    legacyMode: true,
-  }
   if(redisUrl) {
     redisClientOptions.url = redisUrl
   }
   let redisClient = createClient(redisClientOptions)
+
   redisClient.connect().catch(console.error)
   authConfig.session = {
-    store: new RedisStore({ client: redisClient }) as any
+    store: new RedisStore({ client: redisClient })
   }
   authConfig.idpLogout = true
   authConfig.backchannelLogout = true
