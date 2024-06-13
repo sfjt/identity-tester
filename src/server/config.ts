@@ -26,6 +26,7 @@ const config = {
     SECRET: getEnv("RWA_SESSION_SECRET"),
     SCOPE: getEnv("RWA_SCOPE", "openid profile email"),
     BASE_URL: baseURL("rwa"),
+    SESSION_STORE: getEnv("SESSION_STORE", "default")
   },
   mfaSettings: {
     CLIENT_ID: getEnv("MFA_SETTINGS_CLIENT_ID"),
