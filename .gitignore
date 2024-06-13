@@ -12,3 +12,5 @@ builds/
 /blob-report/
 /playwright/.cache/
 config.json
+
+/data/**/*
