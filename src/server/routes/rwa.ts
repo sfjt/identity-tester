@@ -65,6 +65,11 @@ const fgaClient = new OpenFgaClient({
 
 rwaRouter.use(auth(authConfig))
 
+rwaRouter.post("/debug", (req, res) => {
+  console.log(req)
+  res.sendStatus(200)
+})
+
 rwaRouter.get("/", (req, res, next) => {
   res.render("./rwa.ejs", {
     isAuthenticated: req.oidc.isAuthenticated(),
