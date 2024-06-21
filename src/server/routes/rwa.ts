@@ -3,6 +3,7 @@ import { auth, ConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
 import RedisStore from "connect-redis"
 import { OpenFgaClient, CredentialsMethod } from '@openfga/sdk'
+import {jwtVerify, createRemoteJWKSet} from "jose"
 
 import config from "../config"
 import {
@@ -14,7 +15,7 @@ import errorHandler from "../middlewares/errorHandler"
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
-const { ISSUER_BASE_URL } = config.global
+const { ISSUER_BASE_URL, AUTH0_DOMAIN } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL, SESSION_STORE } = config.rwa
 const { API_IDENTIFIER } = config.api
 const {FGA_API_URL, FGA_STORE_ID, FGA_API_TOKEN_ISSUER, FGA_API_AUDIENCE, FGA_CLIENT_ID, FGA_CLIENT_SECRET} = config.fga
@@ -65,8 +66,33 @@ const fgaClient = new OpenFgaClient({
 
 rwaRouter.use(auth(authConfig))
 
-rwaRouter.post("/debug", (req, res) => {
-  console.log(req)
+rwaRouter.post("/debug", async (req, res) => {
+  const logoutToken = req.body.logout_token
+  if (!logoutToken) {
+    res.status(400).json({
+      error: "invalid_request",
+      error_description: "Missing logout_token",
+    })
+    return
+  }
+
+  const jwks = createRemoteJWKSet(new URL(`https://${AUTH0_DOMAIN}/.well-known/jwks.json`))
+  try {
+    const { payload, protectedHeader } = await jwtVerify(logoutToken, jwks, {
+      issuer: ISSUER_BASE_URL,
+      audience: CLIENT_ID,
+    })
+    console.log(payload)
+    console.log(protectedHeader)
+  } catch (e) {
+    console.error(e)
+    res.status(400).json({
+      error: "invalid_request",
+      error_description: "Invalid logout_token",
+    })
+    return
+  }
+
   res.sendStatus(200)
 })
 
