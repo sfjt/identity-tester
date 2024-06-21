@@ -76,14 +76,17 @@ rwaRouter.post("/debug", async (req, res) => {
     return
   }
 
+  let sessionKey = ""
   const jwks = createRemoteJWKSet(new URL(`https://${AUTH0_DOMAIN}/.well-known/jwks.json`))
   try {
     const { payload, protectedHeader } = await jwtVerify(logoutToken, jwks, {
       issuer: `https://${AUTH0_DOMAIN}/`,
       audience: CLIENT_ID,
     })
-    console.log(payload)
-    console.log(protectedHeader)
+    if(payload?.sid && typeof payload.sid === "string") {
+      sessionKey = `sess:${sid}`
+      console.log(sessionKey)
+    }
   } catch (e) {
     console.error(e)
     res.status(400).json({
@@ -93,7 +96,18 @@ rwaRouter.post("/debug", async (req, res) => {
     return
   }
 
-  res.sendStatus(200)
+  if(authConfig.session?.store instanceof RedisStore) {
+    authConfig.session.store.destroy(sessionKey, (_err, _data) => {
+      if(_err) {
+        console.error(_err)
+        res.status(500).json({
+          error: "internal_server_error",
+        })
+        return
+      }
+      res.sendStatus(204)
+    })
+  }
 })
 
 rwaRouter.get("/", (req, res, next) => {
