@@ -79,7 +79,7 @@ rwaRouter.post("/debug", async (req, res) => {
   const jwks = createRemoteJWKSet(new URL(`https://${AUTH0_DOMAIN}/.well-known/jwks.json`))
   try {
     const { payload, protectedHeader } = await jwtVerify(logoutToken, jwks, {
-      issuer: ISSUER_BASE_URL,
+      issuer: `https://${AUTH0_DOMAIN}/`,
       audience: CLIENT_ID,
     })
     console.log(payload)
