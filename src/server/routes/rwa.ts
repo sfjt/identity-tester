@@ -84,7 +84,7 @@ rwaRouter.post("/debug", async (req, res) => {
       audience: CLIENT_ID,
     })
     if(payload?.sid && typeof payload.sid === "string") {
-      sessionKey = `sess:${sid}`
+      sessionKey = `sess:${payload.sid}`
       console.log(sessionKey)
     }
   } catch (e) {
