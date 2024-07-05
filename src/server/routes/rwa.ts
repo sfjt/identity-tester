@@ -2,7 +2,7 @@ import express from "express"
 import { auth, ConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
 import RedisStore from "connect-redis"
-import { OpenFgaClient, CredentialsMethod } from '@openfga/sdk'
+import { OpenFgaClient, CredentialsMethod } from "@openfga/sdk"
 
 import config from "../config"
 import {
@@ -14,10 +14,18 @@ import errorHandler from "../middlewares/errorHandler"
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
-const { ISSUER_BASE_URL, AUTH0_DOMAIN } = config.global
-const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL, SESSION_STORE } = config.rwa
+const { ISSUER_BASE_URL } = config.global
+const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL, SESSION_STORE } =
+  config.rwa
 const { API_IDENTIFIER } = config.api
-const {FGA_API_URL, FGA_STORE_ID, FGA_API_TOKEN_ISSUER, FGA_API_AUDIENCE, FGA_CLIENT_ID, FGA_CLIENT_SECRET} = config.fga
+const {
+  FGA_API_URL,
+  FGA_STORE_ID,
+  FGA_API_TOKEN_ISSUER,
+  FGA_API_AUDIENCE,
+  FGA_CLIENT_ID,
+  FGA_CLIENT_SECRET,
+} = config.fga
 
 const authConfig: ConfigParams = {
   authRequired: false,
@@ -31,19 +39,19 @@ const authConfig: ConfigParams = {
     response_type: "code",
     scope: SCOPE,
     audience: API_IDENTIFIER,
-  }
+  },
 }
 
 if (SESSION_STORE === "redis") {
   const redisClientOptions: RedisClientOptions = {}
   const redisUrl = process.env.REDIS_URL
-  if(redisUrl) {
+  if (redisUrl) {
     redisClientOptions.url = redisUrl
   }
   let redisClient = createClient(redisClientOptions)
   redisClient.connect().catch(console.error)
   authConfig.session = {
-    store: new RedisStore({ client: redisClient })
+    store: new RedisStore({ client: redisClient }),
   }
 }
 
@@ -57,9 +65,9 @@ const fgaClient = new OpenFgaClient({
       apiAudience: FGA_API_AUDIENCE,
       clientId: FGA_CLIENT_ID,
       clientSecret: FGA_CLIENT_SECRET,
-    }
-  }
-});
+    },
+  },
+})
 
 rwaRouter.use(auth(authConfig))
 
@@ -79,23 +87,23 @@ rwaRouter.get("/fga", async (req, res, next) => {
   let objectName = ""
   if (sub) {
     const user = `user:${sub}`
-    const object = objectName = `doc:${sub}-default`
+    const object = (objectName = `doc:${sub}-default`)
     const defaultObject = {
       user,
       relation: "owner",
       object,
     }
     const check = await fgaClient.check(defaultObject)
-    const defaultObjectExists= check.allowed || false
-    if(!defaultObjectExists) {
+    const defaultObjectExists = check.allowed || false
+    if (!defaultObjectExists) {
       await fgaClient.writeTuples([defaultObject])
     }
     const expand = await fgaClient.expand({
       object,
-      relation: "viewer"
+      relation: "viewer",
     })
     const users = expand.tree?.root?.leaf?.users?.users
-    if(users && users.length > 0) {
+    if (users && users.length > 0) {
       listViewers = users
     }
   }

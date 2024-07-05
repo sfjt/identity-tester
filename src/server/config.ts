@@ -26,7 +26,7 @@ const config = {
     SECRET: getEnv("RWA_SESSION_SECRET"),
     SCOPE: getEnv("RWA_SCOPE", "openid profile email"),
     BASE_URL: baseURL("rwa"),
-    SESSION_STORE: getEnv("SESSION_STORE", "default")
+    SESSION_STORE: getEnv("SESSION_STORE", "default"),
   },
   mfaSettings: {
     CLIENT_ID: getEnv("MFA_SETTINGS_CLIENT_ID"),
@@ -60,7 +60,7 @@ const config = {
     FGA_STORE_ID: getEnv("FGA_STORE_ID"),
     FGA_CLIENT_ID: getEnv("FGA_CLIENT_ID"),
     FGA_CLIENT_SECRET: getEnv("FGA_CLIENT_SECRET"),
-  }
+  },
 }
 
 function getEnv(name: string, defaultValue = ""): string {

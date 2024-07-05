@@ -43,10 +43,9 @@ import {
       await client.loginWithPopup()
     } catch (err) {
       console.log("[loginWithPopup]", err)
-      if(err instanceof PopupTimeoutError) {
-        err.popup.close();
+      if (err instanceof PopupTimeoutError) {
+        err.popup.close()
       }
-
     }
     await silentAuth()
   }
