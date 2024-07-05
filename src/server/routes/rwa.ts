@@ -3,7 +3,6 @@ import { auth, ConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
 import RedisStore from "connect-redis"
 import { OpenFgaClient, CredentialsMethod } from "@openfga/sdk"
-import axios from "axios"
 
 import config from "../config"
 import {
@@ -15,7 +14,7 @@ import errorHandler from "../middlewares/errorHandler"
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
-const { ISSUER_BASE_URL, HOSTNAME } = config.global
+const { ISSUER_BASE_URL } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL, SESSION_STORE } =
   config.rwa
 const { API_IDENTIFIER } = config.api
@@ -41,6 +40,7 @@ const authConfig: ConfigParams = {
     scope: SCOPE,
     audience: API_IDENTIFIER,
   },
+  idpLogout: true,
 }
 
 if (SESSION_STORE === "redis") {
@@ -54,8 +54,6 @@ if (SESSION_STORE === "redis") {
   authConfig.session = {
     store: new RedisStore({ client: redisClient }),
   }
-  authConfig.backchannelLogout = true
-  authConfig.idpLogout = true
 }
 
 const fgaClient = new OpenFgaClient({
