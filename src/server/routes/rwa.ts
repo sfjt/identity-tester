@@ -187,10 +187,10 @@ rwaRouter.get("/logout/federated", (req, res, next) => {
 })
 
 rwaRouter.post("/debug", async (req, res, next) => {
-  console.log(req.body)
+  console.log("req.body", req.body)
   try {
     const bl = await axios.post(`https://${HOSTNAME}/rwa/backchannel-logout`, req.body)
-    console.log(bl)
+    console.log("bl", bl)
   } catch (e) {
     console.log(e)
     res.sendStatus(400)
