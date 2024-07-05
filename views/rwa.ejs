@@ -28,6 +28,7 @@
         <% if(isAuthenticated) { %>
         <li><a href="/rwa/fga">FGA - Fine Grained Authorization</a></li>
         <li><a href="/rwa/logout" data-testid="logout">Logout</a></li>
+        <li><button id="federatedLogoutButton">Federated Logout</button> / returnTo: <input type="text" id="returnToInput"></li>
         <%} else { %>
         <li><a href="/rwa/login" data-testid="simpleLogin">Login</a></li>
         <% } %>

@@ -1,4 +1,21 @@
 ;(function () {
+  function addFederatedLogoutEvent() {
+    const federatedLogoutButton = document.getElementById(
+      "federatedLogoutButton",
+    )
+    federatedLogoutButton.addEventListener(
+      "click",
+      federatedLogout,
+    )
+
+    function federatedLogout() {
+      const returnToInput = document.getElementById("returnToInput")
+      const returnToValue = encodeURIComponent(returnToInput.value)
+      const url = `${window.location.href}/logout/federated?returnTo=${returnToValue}`
+      window.location.href = url
+    }
+  }
+  
   function addRequestWithCustomParamsEvent() {
     const loginWithCustomParamsButton = document.getElementById(
       "loginWithCustomParamsButton",
@@ -33,11 +50,12 @@
       customParamsTextarea.style.borderColor = "red"
       return
     }
-    queryString = queryString.slice(0, -1)
+    queryString = encodeURI(queryString.slice(0, -1))
     url = `${window.location.href}/login/custom?${queryString}`
     console.log("[requestWithCustomParams]", url)
     window.location.href = url
   }
 
   addRequestWithCustomParamsEvent()
+  addFederatedLogoutEvent()
 })()

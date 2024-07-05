@@ -177,11 +177,21 @@ rwaRouter.post(
 )
 
 rwaRouter.get("/logout/federated", (req, res, next) => {
-  res.oidc.logout({
-    logoutParams: {
-      federated: true,
-    },
-  })
+  const returnTo = req.query["returnTo"]
+  if(returnTo) {
+    res.oidc.logout({
+      returnTo: returnTo.toString(),
+      logoutParams: {
+        federated: true,
+      },
+    })
+  } else {
+    res.oidc.logout({
+      logoutParams: {
+        federated: true,
+      },
+    })
+  }
 })
 
 rwaRouter.use(errorHandler)
