@@ -3,7 +3,6 @@ import { auth, ConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
 import RedisStore from "connect-redis"
 import { OpenFgaClient, CredentialsMethod } from '@openfga/sdk'
-import {jwtVerify, createRemoteJWKSet} from "jose"
 
 import config from "../config"
 import {
@@ -46,8 +45,6 @@ if (SESSION_STORE === "redis") {
   authConfig.session = {
     store: new RedisStore({ client: redisClient })
   }
-  authConfig.idpLogout = true
-  authConfig.backchannelLogout = true
 }
 
 const fgaClient = new OpenFgaClient({
@@ -65,50 +62,6 @@ const fgaClient = new OpenFgaClient({
 });
 
 rwaRouter.use(auth(authConfig))
-
-rwaRouter.post("/debug", async (req, res) => {
-  const logoutToken = req.body.logout_token
-  if (!logoutToken) {
-    res.status(400).json({
-      error: "invalid_request",
-      error_description: "Missing logout_token",
-    })
-    return
-  }
-
-  let sessionKey = ""
-  const jwks = createRemoteJWKSet(new URL(`https://${AUTH0_DOMAIN}/.well-known/jwks.json`))
-  try {
-    const { payload, protectedHeader } = await jwtVerify(logoutToken, jwks, {
-      issuer: `https://${AUTH0_DOMAIN}/`,
-      audience: CLIENT_ID,
-    })
-    if(payload?.sid && typeof payload.sid === "string") {
-      sessionKey = `sess:${payload.sid}`
-      console.log(sessionKey)
-    }
-  } catch (e) {
-    console.error(e)
-    res.status(400).json({
-      error: "invalid_request",
-      error_description: "Invalid logout_token",
-    })
-    return
-  }
-
-  if(authConfig.session?.store instanceof RedisStore) {
-    authConfig.session.store.destroy(sessionKey, (_err, _data) => {
-      if(_err) {
-        console.error(_err)
-        res.status(500).json({
-          error: "internal_server_error",
-        })
-        return
-      }
-      res.sendStatus(204)
-    })
-  }
-})
 
 rwaRouter.get("/", (req, res, next) => {
   res.render("./rwa.ejs", {
