@@ -3,6 +3,7 @@ import { auth, ConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
 import RedisStore from "connect-redis"
 import { OpenFgaClient, CredentialsMethod } from "@openfga/sdk"
+import axios from "axios"
 
 import config from "../config"
 import {
@@ -14,7 +15,7 @@ import errorHandler from "../middlewares/errorHandler"
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
-const { ISSUER_BASE_URL } = config.global
+const { ISSUER_BASE_URL, HOSTNAME } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL, SESSION_STORE } =
   config.rwa
 const { API_IDENTIFIER } = config.api
@@ -53,6 +54,8 @@ if (SESSION_STORE === "redis") {
   authConfig.session = {
     store: new RedisStore({ client: redisClient }),
   }
+  authConfig.backchannelLogout = true
+  authConfig.idpLogout = true
 }
 
 const fgaClient = new OpenFgaClient({
@@ -181,6 +184,19 @@ rwaRouter.get("/logout/federated", (req, res, next) => {
       federated: true,
     },
   })
+})
+
+rwaRouter.post("/debug", async (req, res, next) => {
+  console.log(req.body)
+  try {
+    const bl = await axios.post(`https://${HOSTNAME}/rwa/backchannel-logout`, req.body)
+    console.log(bl)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(400)
+    return
+  }
+  res.sendStatus(204)
 })
 
 rwaRouter.use(errorHandler)
