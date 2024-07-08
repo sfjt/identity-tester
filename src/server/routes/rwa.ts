@@ -14,7 +14,7 @@ import errorHandler from "../middlewares/errorHandler"
 const rwaRouter = express.Router()
 const PROFILING_CONNECTION_NAME = "profiling"
 
-const { ISSUER_BASE_URL } = config.global
+const { ISSUER_BASE_URL, HOSTNAME } = config.global
 const { CLIENT_ID, CLIENT_SECRET, SECRET, SCOPE, BASE_URL, SESSION_STORE } =
   config.rwa
 const { API_IDENTIFIER } = config.api
@@ -125,6 +125,18 @@ rwaRouter.get("/login/custom", (req, res, next) => {
       ...req.query,
     },
   })
+})
+
+rwaRouter.get("/login/organization", (req, res, next) => {
+  const invitationTicketId = (req.query["invitation"] || "").toString()
+  const organizationId = (req.query["organization"] || "").toString()
+  const organizationName = (req.query["organization_name"] || "").toString()
+  console.log("Invitation to an Organization: ", invitationTicketId, organizationId, organizationName)
+  const params = new URLSearchParams()
+  params.append("invitation", invitationTicketId)
+  params.append("organization", organizationId)
+  params.append("organization_name", organizationName)
+  res.redirect(`https://${organizationName}.${HOSTNAME}/login?${params.toString}`)
 })
 
 rwaRouter.get("/logout/custom", (req, res, next) => {
