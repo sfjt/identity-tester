@@ -136,7 +136,9 @@ rwaRouter.get("/login/organization", (req, res, next) => {
   params.append("invitation", invitationTicketId)
   params.append("organization", organizationId)
   params.append("organization_name", organizationName)
-  res.redirect(`https://${organizationName}.${HOSTNAME}/rwa/login?${params.toString()}`)
+  const baseUrl = `https://${organizationName}.${HOSTNAME}`
+  params.append("redirect_uri", `${baseUrl}/rwa/callback`)
+  res.redirect(`${baseUrl}/rwa/login/custom?${params.toString()}`)
 })
 
 rwaRouter.get("/logout/custom", (req, res, next) => {
