@@ -3,11 +3,8 @@
     const federatedLogoutButton = document.getElementById(
       "federatedLogoutButton",
     )
-    if(federatedLogoutButton){
-      federatedLogoutButton.addEventListener(
-        "click",
-        federatedLogout,
-      )
+    if (federatedLogoutButton) {
+      federatedLogoutButton.addEventListener("click", federatedLogout)
     }
 
     function federatedLogout() {
@@ -17,7 +14,7 @@
       window.location.href = url
     }
   }
-  
+
   function addRequestWithCustomParamsEvent() {
     const loginWithCustomParamsButton = document.getElementById(
       "loginWithCustomParamsButton",

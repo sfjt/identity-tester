@@ -131,7 +131,12 @@ rwaRouter.get("/login/organization", (req, res, next) => {
   const invitationTicketId = (req.query["invitation"] || "").toString()
   const organizationId = (req.query["organization"] || "").toString()
   const organizationName = (req.query["organization_name"] || "").toString()
-  console.log("Invitation to an Organization: ", invitationTicketId, organizationId, organizationName)
+  console.log(
+    "Invitation to an Organization: ",
+    invitationTicketId,
+    organizationId,
+    organizationName,
+  )
   const params = new URLSearchParams()
   params.append("invitation", invitationTicketId)
   params.append("organization", organizationId)
@@ -190,7 +195,7 @@ rwaRouter.post(
 
 rwaRouter.get("/logout/federated", (req, res, next) => {
   const returnTo = req.query["returnTo"]
-  if(returnTo) {
+  if (returnTo) {
     res.oidc.logout({
       returnTo: returnTo.toString(),
       logoutParams: {
