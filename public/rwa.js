@@ -3,10 +3,12 @@
     const federatedLogoutButton = document.getElementById(
       "federatedLogoutButton",
     )
-    federatedLogoutButton.addEventListener(
-      "click",
-      federatedLogout,
-    )
+    if(federatedLogoutButton){
+      federatedLogoutButton.addEventListener(
+        "click",
+        federatedLogout,
+      )
+    }
 
     function federatedLogout() {
       const returnToInput = document.getElementById("returnToInput")
