@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction, RequestHandler } from "express"
+import { Response, NextFunction, RequestHandler } from "express"
 
 export function checkExpiredToken(url: string): RequestHandler {
   return async (req: any, res: Response, next: NextFunction) => {

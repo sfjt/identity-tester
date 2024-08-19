@@ -1,5 +1,5 @@
 import express from "express"
-import { auth, ConfigParams } from "express-openid-connect"
+import { auth, ConfigParams, SessionConfigParams } from "express-openid-connect"
 import { createClient, RedisClientOptions } from "redis"
 import RedisStore from "connect-redis"
 import { OpenFgaClient, CredentialsMethod } from "@openfga/sdk"
